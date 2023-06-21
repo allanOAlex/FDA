@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- ======= Hero Section ======= -->
+<section id="hero">
+    <div class="hero-container">
+        <a href="index.html" class="hero-logo" data-aos="zoom-in"><img src="~/assets/img/logo-1.jpeg" alt=""></a>
+        <h1 data-aos="zoom-in" style="color: #d6ad53 !important;">Analyt<b style="background: #fff !important;">IQ</b></h1>
+        <h2 data-aos="fade-up">Crunching Numbers, Driving Results</h2>
+        <a data-aos="fade-up" data-aos-delay="200" class="btn-get-started scrollto " style="background: #444d6a !important;" asp-controller="Auth" asp-action="LoginView">Get Started</a>
+    </div>
+</section><!-- End Hero -->
+
+
+@section Scripts{
+    <script>
+        removeFromLocalStorage("authToken");
+    </script>
+}

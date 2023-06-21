@@ -1,0 +1,16 @@
+﻿@inject IHttpContextAccessor httpContextAccessor
+
+@{
+
+    @if (httpContextAccessor.HttpContext!.Request.Path != "/" && 
+    httpContextAccessor.HttpContext!.Request.Path != "/auth/loginview" && 
+    httpContextAccessor.HttpContext!.Request.Path != "/user/registerview")
+    {
+        Layout = "_LayoutDashboard";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+
+}

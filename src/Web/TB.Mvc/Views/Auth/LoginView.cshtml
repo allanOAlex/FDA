@@ -1,0 +1,81 @@
+﻿@model LoginRequest
+@inject IHttpContextAccessor httpContextAccessor
+
+
+@{
+    ViewData["Title"] = "User Login";
+    Layout = "_Layout";
+    var createUserRequest = new CreateUserRequest();
+    var path = httpContextAccessor.HttpContext!.Request.Path;
+}
+
+
+<h4 class="text-center text-white" style=" padding-top:5rem;">Login</h4>
+
+<hr style="background: #d6ad53 !important;" />
+
+<div id="spinner-overlay">
+    <div id="spinner"></div>
+</div>
+
+<div class="container" style="padding-left:20rem; padding-right:20rem; padding-top:2rem;">
+    <div class="row d-flex justify-content-center text-white">
+        <div class="col">
+            <form id="loginForm" asp-action="Login">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group mb-3 border-0">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3 border-0">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check mb-3">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+                    </label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <button id="loginButton" type="submit" class="btn " style="background: #d6ad53 !important; color:#fff !important; width:100%; color:#444d6a !important;"><strong>Login</strong></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a asp-controller="User" asp-action="RegisterView">SignUp</a>
+        </div>
+        <div>
+            <a asp-controller="User" asp-action="ForgotPasswordView">Forgot Password</a>
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#spinner-overlay').hide(); 
+
+            $('#loginButton').click(function () {
+                $('#spinner-overlay').show();
+                $('#loginForm').addClass('disabled');
+            });
+        });
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}

@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "_LayoutDashboard";
+}
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Unauthorized',
+                text: 'You are not authorized to view this resource.',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    console.log("Confirmed!");
+                }
+            });
+        });
+
+    </script>
+}
+

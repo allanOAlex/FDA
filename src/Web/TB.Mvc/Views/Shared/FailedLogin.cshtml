@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Something went wrong!',
+                text: 'Please contact system admin. ',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    console.log("Confirmed!");
+                }
+            });
+        });
+
+    </script>
+}

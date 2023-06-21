@@ -1,0 +1,70 @@
+﻿@{
+
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("HandleTokenExpired", "Auth")',
+                type: 'GET',
+                success: function (response) {
+                    if (response.successful) {
+                        $.ajax({
+                            url: '@Url.Action("CreateJwtToken", "Auth")',
+                            type: 'GET',
+                            success: function (response) {
+                                if (response.successful) {
+                                    localStorage.removeItem('authToken');
+                                    localStorage.setItem('authToken', response.token);
+
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'New Jwt Success!',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Okay',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            console.log("New Jwt Confirmed!")
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'New JwtToken generation failed',
+                                        text: 'An error occurred while generating a new token.',
+                                        confirmButtonText: 'Okay',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            console.log("New Jwt Confirmed!")
+                                        }
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'AJAX request failed',
+                                    text: 'An error occurred while communicating with the server.',
+                                });
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Somewthing went wrong',
+                            text: 'An error occurred during registration.',
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AJAX request failed',
+                        text: 'An error occurred while communicating with the server.',
+                    });
+                }
+            });
+        });
+    </script>
+}

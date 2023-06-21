@@ -1,0 +1,23 @@
+﻿@{
+    
+}
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Not Found',
+                text: 'The resource could be unavailable.',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    console.log("Confirmed!");
+                }
+            });
+        });
+
+    </script>
+}

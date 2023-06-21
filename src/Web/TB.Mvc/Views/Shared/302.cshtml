@@ -1,0 +1,20 @@
+﻿@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({
+                icon: 'info',
+                title: 'Your session has expired',
+                text: 'Please login to continue.',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    console.log("Confirmed!");
+                    window.location.href = '@Url.Action("LoginView", "Auth")';
+                }
+            });
+        });
+
+    </script>
+}

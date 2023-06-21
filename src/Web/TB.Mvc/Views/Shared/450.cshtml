@@ -1,0 +1,19 @@
+﻿@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Bad Data Found',
+                text: 'Please contact system administrator.',
+                showConfirmButton: true,
+                allowOutsideClick: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    console.log("Confirmed!");
+                }
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,170 @@
+﻿@model CreateUserRequest
+@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    ViewData["Title"] = "User Registration";
+    var path = httpContextAccessor.HttpContext!.Request.Path;
+}
+
+
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                            <div class="card-body">
+
+                                <form id="createUserForm" asp-action="Register">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="row mb-3">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="FirstName" class="control-label"></label>
+                                                <input asp-for="FirstName" class="form-control" />
+                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="LastName" class="control-label"></label>
+                                                <input asp-for="LastName" class="form-control" />
+                                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="OtherNames" class="control-label"></label>
+                                                <input asp-for="OtherNames" class="form-control" />
+                                                <span asp-validation-for="OtherNames" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-xs-12 col-sm-8 col-md-8">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input asp-for="Email" class="form-control" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="PhoneNumber" class="control-label"></label>
+                                                <input asp-for="PhoneNumber" class="form-control" />
+                                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-2">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="UserName" class="control-label"></label>
+                                                <input asp-for="UserName" class="form-control" />
+                                                <span asp-validation-for="UserName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="Password" class="control-label"></label>
+                                                <input asp-for="Password" class="form-control" />
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group mb-3">
+                                                <label asp-for="ConfirmPassword" class="control-label"></label>
+                                                <input asp-for="ConfirmPassword" class="form-control" />
+                                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <button type="submit" class="btn " style="background: #d6ad53 !important; color:#fff !important; width:100%; color:#444d6a !important;"><strong>Submit</strong></button>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div class="small"><a asp-controller="Auth" asp-action="LoginView">Have an account? Go to login</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="messageBox" style="display: none;">
+    <p>Registration successful!</p>
+    <button id="triggerEventButton">Click me</button>
+</div>
+
+
+
+@section Scripts {
+
+
+    <script>
+        $(document).ready(function () {
+            $("#createUserForm").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '@Url.Action("Register", "User")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response, textStatus, xhr) {
+                        if (xhr.getResponseHeader('TokenExpired') === 'true') {
+                            // Token has expired, initiate token refresh process or handle as needed
+                            // Call your refresh token endpoint or perform any other necessary actions
+                        } else if (response.success) {
+                            resetForm();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Registration successful!',
+                                showCancelButton: true,
+                                confirmButtonText: 'Okay',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = '@Url.Action("LoginView", "Auth")';
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Registration failed',
+                                text: 'An error occurred during registration.',
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.getResponseHeader('TokenExpired') === 'true') {
+                            // Token has expired, initiate token refresh process or handle as needed
+                            // Call your refresh token endpoint or perform any other necessary actions
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'AJAX request failed',
+                                text: 'An error occurred while communicating with the server.',
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        resetForm();
+    </script>
+
+}
