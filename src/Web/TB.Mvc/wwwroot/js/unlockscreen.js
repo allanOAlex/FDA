@@ -46,7 +46,7 @@ function handleTokenExpiration() {
                         console.log(response)
                         if (response.successful) {
                             localStorage.removeItem('authToken');
-                            localStorage.setItem('authToken', response.token);
+                            localStorage.setItem('authToken', response.jwtAuthToken);
                             unlockScreen();
                             Swal.fire({
                                 icon: 'success',

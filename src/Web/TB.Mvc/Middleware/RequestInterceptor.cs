@@ -17,6 +17,7 @@ using TB.Shared.Exceptions.Global;
 using TB.Shared.Exceptions.ModelExceptions;
 using TB.Shared.Requests.Auth;
 using TB.Shared.Requests.Common;
+using TB.Shared.Requests.Employee;
 using TB.Shared.Validations.RequestValidators;
 
 namespace TB.Mvc.Middleware
@@ -304,12 +305,15 @@ namespace TB.Mvc.Middleware
             }
             else if (path.Contains("unlockscreen"))
             {
-                //path = "/auth/unlockscreen";
                 return typeof(UnlockScreenRequest);
             }
             else if (path.Contains("handletokenexpired"))
             {
                 return typeof(TokenExpiredRequest);
+            }
+            else if (path.Contains("updateemployeesalary"))
+            {
+                return typeof(UpdateEmployeeSalaryRequest);
             }
             else if (path.Contains("error") || path.Contains("Error"))
             {

@@ -331,14 +331,18 @@ namespace TB.Infrastructure.Implementations.Services
                         IEnumerable<AuthToken> authTokens = await unitOfWork.Auth.FindAuthTokens();
                         var existingToken = authTokens.AsQueryable().Where(row =>
                         row.UserId.Equals(user.Id) &&
-                        row.TokenName!.Equals(authToken.TokenName) &&
-                        row.TokenValue!.Equals(authToken.TokenValue)
+                        row.TokenName!.Equals(authToken.TokenName) //&&
+                        //row.TokenValue!.Equals(authToken.TokenValue)
 
                         );
 
                         if (existingToken.Any())
                         {
-                            return new LoginResponse { Successful = true, Message = "Login Successful!", Token = new JwtSecurityTokenHandler().WriteToken(userToken), Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, IsAuthenticated = true };
+                            if (!string.IsNullOrEmpty(existingToken.FirstOrDefault()!.TokenValue))
+                            {
+                                return new LoginResponse { Successful = true, Message = "Login Successful!", Token = new JwtSecurityTokenHandler().WriteToken(userToken), Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, IsAuthenticated = true };
+                            }
+                            
                         }
                             
                         var createAuthTokenResult = await unitOfWork.Auth.CreateAuthTokenAsync(authToken);

@@ -89,7 +89,6 @@ namespace TB.Mvc.Controllers
             }
         }
 
-        [HttpPost]
         public async Task<ActionResult<LogoutResponse>> Logout(LogoutRequest request)
         {
             request.Id = int.Parse(sessionDictionary["UserId"]);
@@ -114,28 +113,6 @@ namespace TB.Mvc.Controllers
 
         }
 
-        public async Task<ActionResult> ClientLogout()
-        {
-            AppConstants.AuthToken = null;
-            ((CustomAuthStateProvider)authStateProvider).MarkUserAsLoggedOut();
-            client.DefaultRequestHeaders.Authorization = null;
-            var authState = await ((CustomAuthStateProvider)authStateProvider).GetAuthenticationStateAsync();
-            var isAuthenticated = authState.User.Identity!.IsAuthenticated;
-            return RedirectToAction("Index", "Home");
-        }
-
-        public async Task<ActionResult> HandleSessionTimeOut()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet]
-        public IActionResult LockScreen()
-        {
-            sessionDictionary["ReturnUrl"] = HttpContext.Request.Path;
-            return View("LockScreenView");
-        }
 
         public async Task<ActionResult<UnlockScreenResponse>> UnlockScreen()
         {
@@ -160,38 +137,6 @@ namespace TB.Mvc.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UnlockScreenResponse>> UnlockScreen1(UnlockScreenRequest unlockScreenRequest)
-        {
-            var userId = int.Parse(sessionDictionary["UserId"]);
-            unlockScreenRequest.UserId = userId;
-            var response = await serviceManager.AuthService.UnlockScreen(unlockScreenRequest);
-            if (!response.Successful == true)
-            {
-                var failureResponse = new
-                {
-                    success = false,
-                    message = "Unlock screen failed"
-                };
-                return Json(failureResponse);
-            }
-
-            var data = new
-            {
-                success = true,
-                response
-            };
-
-            return Json(data);
-
-        }
-
-        [Authorize(Policy = "AllowAnonymousAccess")]
-        public IActionResult HandleSessionExpired()
-        {
-            return View();
-        }
-
         public async Task<ActionResult<GetRefreshTokenResponse>> HandleTokenExpired()
         {
             var userId = int.Parse(sessionDictionary["UserId"]);
@@ -210,7 +155,7 @@ namespace TB.Mvc.Controllers
             {
                 
                 string userClaimsString = sessionDictionary["UserClaims"]; 
-                List<Claim> userClaims = JsonConvert.DeserializeObject<List<Claim>>(sessionDictionary["UserClaims"]);
+                List<Claim> userClaims = JsonConvert.DeserializeObject<List<Claim>>(sessionDictionary["UserClaims"])!;
                 GetRefreshTokenRequest refreshTokenRequest = new()
                 {
                     UserId = int.Parse(sessionDictionary["UserId"]),
@@ -248,6 +193,19 @@ namespace TB.Mvc.Controllers
             AppConstants.HasRedirected = false;
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<ActionResult> HandleSessionTimeOut()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [Authorize(Policy = "AllowAnonymousAccess")]
+        public IActionResult HandleSessionExpired()
+        {
+            return View();
         }
 
     }

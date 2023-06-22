@@ -19,6 +19,7 @@ namespace TB.Infrastructure.Extensions
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IFinancialDataRepository, FinancialDataRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAppUserService, AppUserService>();
@@ -28,6 +29,7 @@ namespace TB.Infrastructure.Extensions
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IFinancialDataService, FinancialDataService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             return services;
 
