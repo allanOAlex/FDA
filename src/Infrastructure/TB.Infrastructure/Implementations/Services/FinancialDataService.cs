@@ -37,7 +37,6 @@ namespace TB.Infrastructure.Implementations.Services
                         {
                             Id = item.Id,
                             Date = item.Date,
-                            Asset = item.Asset,
                             Open = item.Open,
                             High = item.High,
                             Low = item.Low,
@@ -78,7 +77,6 @@ namespace TB.Infrastructure.Implementations.Services
                         var financialData = new GetFinancialDataRequest
                         {
                             Date = record.Date,
-                            Asset = record.Asset,
                             Open = record.Open,
                             High = record.High,
                             Low = record.Low,

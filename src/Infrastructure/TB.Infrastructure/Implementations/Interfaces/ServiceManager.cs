@@ -16,7 +16,6 @@ namespace TB.Infrastructure.Implementations.Interfaces
         public IAuthService AuthService { get; private set; }
         public IRoleService RoleService { get; private set; }
         public IFinancialDataService FinancialDataService { get; private set; }
-        public IGoogleService GoogleService { get; private set; }
         public IEmailService EmailService { get; private set; }
 
         private readonly IMapper mapper;
@@ -28,9 +27,8 @@ namespace TB.Infrastructure.Implementations.Interfaces
         private readonly IConfiguration config;
         private readonly EmailConfiguration emailConfig;
         private readonly IHttpContextAccessor httpContextAccessor;
-        //private readonly SheetsService? sheetsService;
 
-        public ServiceManager(IUnitOfWork UnitOfWork, IMapper Mapper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IClaimsService ClaimsService, IJwtTokenService JwtTokenService, IConfiguration Config, EmailConfiguration EmailConfig, IHttpContextAccessor HttpContextAccessor)//, SheetsService SheetsService
+        public ServiceManager(IUnitOfWork UnitOfWork, IMapper Mapper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IClaimsService ClaimsService, IJwtTokenService JwtTokenService, IConfiguration Config, EmailConfiguration EmailConfig, IHttpContextAccessor HttpContextAccessor)
         {
             unitOfWork = UnitOfWork;
             mapper = Mapper;
@@ -41,14 +39,12 @@ namespace TB.Infrastructure.Implementations.Interfaces
             config = Config;
             emailConfig = EmailConfig;
             httpContextAccessor = HttpContextAccessor;
-            //sheetsService = SheetsService;
 
 
             AppUserService = new AppUserService(unitOfWork, mapper, userManager);
             AuthService = new AuthService(unitOfWork, mapper, signInManager, userManager, config, claimsService, jwtTokenService, httpContextAccessor);
             RoleService = new RoleService();
             FinancialDataService = new FinancialDataService(unitOfWork, mapper);
-            GoogleService = new GoogleService(unitOfWork, mapper);
             EmailService = new EmailService(emailConfig);
         }
 
