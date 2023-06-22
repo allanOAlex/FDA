@@ -30,7 +30,7 @@ builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(SSConnString!));
-builder.Services.AddDbContext<MyDbContext>(options =>
+builder.Services.AddDbContext<MyDBContext>(options =>
 {
     options.UseMySql(MSConnString, ServerVersion.AutoDetect(MSConnString));
 });

@@ -17,6 +17,7 @@ namespace TB.Infrastructure.Implementations.Interfaces
         public IRoleService RoleService { get; private set; }
         public IFinancialDataService FinancialDataService { get; private set; }
         public IEmailService EmailService { get; private set; }
+        public IEmployeeService EmployeeService { get; private set; }
 
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
@@ -46,6 +47,7 @@ namespace TB.Infrastructure.Implementations.Interfaces
             RoleService = new RoleService();
             FinancialDataService = new FinancialDataService(unitOfWork, mapper);
             EmailService = new EmailService(emailConfig);
+            EmployeeService = new EmployeeService(unitOfWork, mapper);
         }
 
     }

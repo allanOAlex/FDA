@@ -4,6 +4,7 @@ using TB.Application.Abstractions.Interfaces;
 using TB.Application.Abstractions.IRepositories;
 using TB.Domain.Models;
 using TB.Infrastructure.Implementations.Repositories;
+using TB.Persistence.MySQL.MySQL;
 using TB.Persistence.SQLServer;
 
 namespace TB.Infrastructure.Implementations.Interfaces
@@ -14,17 +15,20 @@ namespace TB.Infrastructure.Implementations.Interfaces
         public IAppUserRepository AppUsers { get; private set; }
         public IRoleRepository Roles { get; private set; }
         public IFinancialDataRepository FinancialData { get; private set; }
+        public IEmployeeRepository Employee { get; private set; }
 
         private readonly DBContext context;
+        private readonly MyDBContext myContext;
         private readonly Dappr daper;
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly IConfiguration config;
 
 
-        public UnitOfWork(DBContext Context, Dappr Daper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IConfiguration Config)
+        public UnitOfWork(DBContext Context, MyDBContext MyContext, Dappr Daper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IConfiguration Config)
         {
             context = Context;
+            myContext = MyContext;
             daper = Daper;
             userManager = UserManager;
             signInManager = SignInManager;
@@ -34,6 +38,7 @@ namespace TB.Infrastructure.Implementations.Interfaces
             AppUsers = new AppUserRepository(context, daper, userManager);
             Roles = new RoleRepository();
             FinancialData = new FinancialDataRepository(context);
+            Employee = new EmployeeRepository(config, myContext);
         }
 
 

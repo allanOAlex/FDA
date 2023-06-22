@@ -2,20 +2,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TB.Domain.Models;
 
 namespace TB.Persistence.MySQL.MySQL
 {
-    public class MyDbContext : DbContext
+    public class MyDBContext : DbContext
     {
-        public MyDbContext()
+        public MyDBContext()
         {
 
         }
 
-        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
+        public MyDBContext(DbContextOptions<MyDBContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            SeedData(modelBuilder);
+
+
+        }
+
+        protected void SeedData(ModelBuilder builder)
+        {
+            builder.Entity<Employee>().HasData(
+                new Employee { Id = 1, Name = "John Doe", Salary = 5000 },
+                new Employee { Id = 2, Name = "Jane Smith", Salary = 6000 }
+            );
+        }
 
 
         public DbSet<Employee>? Employees { get; set; }
