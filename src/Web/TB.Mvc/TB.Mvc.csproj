@@ -38,11 +38,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.30.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\TB.Application\TB.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TB.Infrastructure\TB.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Persistence\TB.Persistence.MySQL\TB.Persistence.MySQL.csproj" />
     <ProjectReference Include="..\..\Shared\TB.Shared\TB.Shared.csproj" />
   </ItemGroup>
 

@@ -9,7 +9,6 @@ namespace TB.Application.Abstractions.Interfaces
         IRoleService RoleService { get; }
         IEmailService EmailService { get; }
         IFinancialDataService FinancialDataService { get; }
-        IGoogleService GoogleService { get; }
         
     }
 }

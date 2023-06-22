@@ -12,13 +12,15 @@ using TB.Infrastructure.Extensions;
 using TB.Mvc.Controllers;
 using TB.Mvc.Extensions;
 using TB.Mvc.Session;
+using TB.Persistence.MySQL.MySQL;
 using TB.Persistence.SQLServer;
 using TB.Shared.Validations.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Auth").GetSection("Jwt").Get<JwtSettings>();
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
-var connectionString = builder.Configuration.GetConnectionString("TB");
+var SSConnString = builder.Configuration.GetConnectionString("TBSS");
+var MSConnString = builder.Configuration.GetConnectionString("TBMS");
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -27,7 +29,11 @@ builder.Services.AddSingleton(jwtSettings);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(connectionString!));
+builder.Services.AddDbContext<DBContext>(options => options.UseSqlServer(SSConnString!));
+builder.Services.AddDbContext<MyDbContext>(options =>
+{
+    options.UseMySql(MSConnString, ServerVersion.AutoDetect(MSConnString));
+});
 builder.Services.AddSingleton<Dappr>();
 
 builder.Services.AddWebEncoders();

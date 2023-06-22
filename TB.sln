@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TB.Shared", "src\Shared\TB.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TB.Mvc", "src\Web\TB.Mvc\TB.Mvc.csproj", "{069C8C8A-F177-4EA7-9FCC-0CC5198FE5EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TB.Persistence.MySQL", "src\Persistence\TB.Persistence.MySQL\TB.Persistence.MySQL.csproj", "{0FAF5AA6-5816-4FBC-8650-650EE90A32B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{069C8C8A-F177-4EA7-9FCC-0CC5198FE5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{069C8C8A-F177-4EA7-9FCC-0CC5198FE5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{069C8C8A-F177-4EA7-9FCC-0CC5198FE5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FAF5AA6-5816-4FBC-8650-650EE90A32B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FAF5AA6-5816-4FBC-8650-650EE90A32B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FAF5AA6-5816-4FBC-8650-650EE90A32B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FAF5AA6-5816-4FBC-8650-650EE90A32B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{0C6C44A3-FF43-4A8D-8DE1-6C31CD8C2C89} = {A2679FD8-B0FD-4BAD-8E0B-E6930D80F313}
 		{DF007960-187B-4405-8609-AF792338B306} = {31272035-3A77-463C-8480-6BBA2967F217}
 		{069C8C8A-F177-4EA7-9FCC-0CC5198FE5EF} = {BCB1007B-46D3-4239-BF11-6BA6403C213A}
+		{0FAF5AA6-5816-4FBC-8650-650EE90A32B5} = {A2679FD8-B0FD-4BAD-8E0B-E6930D80F313}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADDB8DE4-FE35-40EA-A2FC-E6A74E612BF0}
