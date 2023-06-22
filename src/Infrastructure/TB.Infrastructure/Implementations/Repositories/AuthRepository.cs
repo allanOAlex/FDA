@@ -27,7 +27,7 @@ namespace TB.Infrastructure.Implementations.Repositories
         {
             try
             {
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     var parameters = new DynamicParameters();
@@ -54,7 +54,7 @@ namespace TB.Infrastructure.Implementations.Repositories
         {
             try
             {
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     var parameters = new DynamicParameters();
@@ -81,7 +81,7 @@ namespace TB.Infrastructure.Implementations.Repositories
             try
             {
                 var query = $"SELECT * FROM [AuthTokens]";
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     var results = await connection.QueryAsync<AuthToken>(query);
@@ -120,7 +120,7 @@ namespace TB.Infrastructure.Implementations.Repositories
             try
             {
                 var query = $"SELECT * FROM [AuthTokens]";
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     var results = await connection.QueryAsync<AuthToken>(query);
@@ -140,7 +140,7 @@ namespace TB.Infrastructure.Implementations.Repositories
             try
             {
                 var query = $"SELECT [TokenValue] FROM [AuthTokens] WHERE UserId = {userId}";
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     
@@ -161,7 +161,7 @@ namespace TB.Infrastructure.Implementations.Repositories
             try
             {
                 var query = $"UPDATE [Users] SET [PasswordResetToken] = {string.Empty} WHERE [ContactId] = {entity.Id}";
-                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TB")))
+                using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("TBSS")))
                 {
                     connection.Open();
                     var result = await connection.ExecuteAsync(query, entity);
