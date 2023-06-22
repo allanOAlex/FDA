@@ -8,6 +8,7 @@ namespace TB.Application.Abstractions.Interfaces
         IAppUserRepository AppUsers { get; }
         IRoleRepository Roles { get; }
         IFinancialDataRepository FinancialData { get; }
+        IEmployeeRepository Employee { get; }
 
         Task CompleteAsync();
     }

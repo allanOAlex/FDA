@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Application\TB.Application\TB.Application.csproj" />
     <ProjectReference Include="..\..\Domain\TB.Domain\TB.Domain.csproj" />
+    <ProjectReference Include="..\..\Persistence\TB.Persistence.MySQL\TB.Persistence.MySQL.csproj" />
     <ProjectReference Include="..\..\Persistence\TB.Persistence\TB.Persistence.csproj" />
   </ItemGroup>
 

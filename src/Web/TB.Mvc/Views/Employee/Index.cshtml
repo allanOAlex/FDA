@@ -1,0 +1,146 @@
+﻿@model IEnumerable<GetAllEmployeesResponse>
+
+@{
+    var createEmpRequest = new CreateEmployeeRequest();
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Users
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Salary</th>
+                    <th>
+                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
+                            Add New
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @if (Model!.Count() > 0)
+                    {
+                        @foreach (var emp in Model)
+                        {
+                            <tr style="font-size:15px">
+                                <td>@emp.Name</td>
+                                <td>@emp.Salary</td>
+                                
+                                <td>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
+                                        Details
+                                    </button>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
+                                        Delete
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="100">
+                                <br>
+                                <p>
+                                    <strong>
+                                        No records to display
+                                    </strong>
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="100">
+                            <br>
+                            <p>
+                                <strong>
+                                    No records to display
+                                </strong>
+                            </p>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalTitle">Edit Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row mb-3">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="@createEmpRequest.Name" class="control-label"></label>
+                                <input asp-for="@createEmpRequest.Name" class="form-control" />
+                                <span asp-validation-for="@createEmpRequest.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="@createEmpRequest.Salary" class="control-label"></label>
+                                <input asp-for="@createEmpRequest.Salary" class="form-control" />
+                                <span asp-validation-for="@createEmpRequest.Salary" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetForm()">
+                                Reset
+                            </button>
+
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseModal()">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="btn  btn-sm loat-end m-1" style="background: #444d6a !important; color:#fff !important; text-transform: none;" asp-controller="User" asp-action="Create">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        resetForm()
+    </script>
+
+    <script>
+        resetAndCloseModal();
+    </script>
+
+
+}

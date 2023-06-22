@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GetAllUsersResponse>
 
 @{
-    Layout = "_LayoutDashboard";
+    //Layout = "_LayoutDashboard";
     var createUserRequest = new CreateUserRequest();
 }
 
@@ -90,18 +90,18 @@
                         </td>
                     </tr>
                 }
-                
+
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Create Employee Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createUserModalTitle">Modal title</h5>
+                <h5 class="modal-title" id="createUserModalTitle">Create User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
                 </button>
@@ -205,5 +205,5 @@
         resetAndCloseModal();
     </script>
 
-    
+
 }
