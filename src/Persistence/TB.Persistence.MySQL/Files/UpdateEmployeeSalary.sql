@@ -4,25 +4,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateEmployeeSalary`(
     OUT oldSalary INT
 )
 BEGIN
-    -- Declare a variable to store the old salary
-    DECLARE oldSalaryTemp INT;
     
-    -- Get the old salary of the employee
-SELECT 
-    Salary
-INTO oldSalaryTemp FROM
-    Employees
-WHERE
-    Id = empID;
+-- Get the old salary of the employee
+SELECT Salary INTO oldSalary FROM Employees WHERE Id = empID;
     
-    -- Update the employee's salary
-UPDATE Employees 
-SET 
-    Salary = newSalary
-WHERE
-    Id = empID;
-    
-    -- Set the old salary value in the OUT parameter
-    SET oldSalary = oldSalaryTemp;
-    SELECT oldSalary AS OldSalary;
+-- Update the employee's salary
+UPDATE Employees SET Salary = newSalary WHERE Id = empID;
+
 END

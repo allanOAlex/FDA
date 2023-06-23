@@ -6,8 +6,6 @@ using System.Data;
 using TB.Application.Abstractions.IRepositories;
 using TB.Domain.Models;
 using TB.Shared.Responses.Auth;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TB.Infrastructure.Implementations.Repositories
 {
