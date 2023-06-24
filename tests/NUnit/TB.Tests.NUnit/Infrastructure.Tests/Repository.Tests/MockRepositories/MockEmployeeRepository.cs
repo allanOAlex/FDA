@@ -23,9 +23,9 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
         }
 
 
-        public Task<Employee> MySQL_Dapper_SP_UpdateEmployeeSalaryAsync(Employee employee, out int oldSalary)
+        public Task<Employee> TestUpdatesEmployeeSalary(Employee employee, out int oldSalary)
         {
-            try
+            try 
             {
                 using (IDbConnection connection = new MySqlConnection(configuration.GetConnectionString("TBMS")))
                 {
@@ -56,7 +56,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
-        public async Task<SPEmployeeDto> UpdateEmployeeSalaryAsync(Employee employee)
+        public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalary_RollBack(Employee employee)
         {
             try
             {
@@ -68,20 +68,15 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
                     parameters.Add("@newSalary", employee.Salary);
                     parameters.Add("@oldSalary", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                    var result = await connection.ExecuteAsync("UpdateEmployeeSalary", parameters, commandType: CommandType.StoredProcedure);
+                    await connection.ExecuteAsync("UpdateEmployeeSalary", parameters, commandType: CommandType.StoredProcedure);
 
-                    object oldSalaryObj = parameters.Get<object>("@oldSalary");
-                    int oldSalary = (oldSalaryObj != DBNull.Value) ? Convert.ToInt32(oldSalaryObj) : 0;
+                    object updatedOldSalary = parameters.Get<int>("@oldSalary");
+                    int oldSalary = (updatedOldSalary != DBNull.Value) ? Convert.ToInt32(updatedOldSalary) : 0;
 
-                    if (oldSalary != 0)
-                    {
-                        return new SPEmployeeDto(oldSalary,employee.Id,employee.Name,employee.Salary);
-                    }
-
-                    throw new Exception("Error updating employee salary");
+                    return oldSalary != 0 ? new UpdateEmployeeDto { Succesful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary } : new UpdateEmployeeDto { Succesful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary };
                 }
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }

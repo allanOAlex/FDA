@@ -90,18 +90,20 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
                         Salary = updatedSalary
                     };
 
-                    var result = await repository.MySQL_Dapper_SP_UpdateEmployeeSalaryAsync(employee, out int oldSalary);
+                    var result = await repository.TestUpdatesEmployeeSalary(employee, out int oldSalary);
 
                     // Assert
                     Assert.That(updatedSalary, Is.Not.EqualTo(oldSalary));
                     Assert.That(employee, Is.EqualTo(result));
 
+
                     // Optionally, assert that the salary in the database has been updated correctly
-                    var updatedEmployee = await context.Employees.FindAsync(employee.Id);
-                    Assert.That(updatedSalary, Is.EqualTo(updatedEmployee!.Salary));
+                    
+                    Assert.That(updatedSalary, Is.EqualTo(employee!.Salary));
 
                     // Clean up the test data (e.g., delete the test employee record)
-                    context.Employees.Remove(updatedEmployee);
+                    var updatedEmployee = await context.Employees.FindAsync(employee.Id);
+                    context.Employees.Remove(updatedEmployee!);
                     await context.SaveChangesAsync();
 
                     context.Entry(newEmployee).State = EntityState.Detached;
@@ -112,7 +114,6 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
                 }
             }
 
-            //mockContext.Verify();
         }
 
         [Test]
@@ -159,11 +160,10 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
                             Salary = updatedSalary
                         };
 
-                        var res = await repository.UpdateEmployeeSalaryAsync(employee);
+                        var result = await repository.TestUpdatesEmployeeSalary_RollBack(employee);
 
                         // Assert
-                        Assert.That(updatedSalary, Is.Not.EqualTo(res.OldSalary));
-                        //Assert.That(employee, Is.EqualTo(res));
+                        Assert.That(updatedSalary, Is.Not.EqualTo(result.OldSalary));
 
                         // Optionally, assert that the salary in the database has been updated correctly
                         var updatedEmployee = await context.Employees.FindAsync(employee.Id);
