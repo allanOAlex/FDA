@@ -1,18 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TB.Shared.Responses.Common;
 
-namespace TB.Domain.Models
+namespace TB.Shared.Responses.FinancialData
 {
-    public class StockPrice
+    public record GetStockPriceResponse : Response
     {
-        public StockPrice()
-        {
-                
-        }
-
-
-        [Key]
-        public int Id { get; set; }
         public string? Symbol { get; set; }
         public DateTime Date { get; set; }
         public decimal Open { get; set; }
@@ -20,9 +16,8 @@ namespace TB.Domain.Models
         public decimal Low { get; set; }
         public decimal Close { get; set; }
         public decimal CloseAdjusted { get; set; }
-        public int Volume { get; set; } 
+        public int Volume { get; set; }
         public decimal SplitCoefficient { get; set; }
-
 
 
     }

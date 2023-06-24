@@ -6,9 +6,13 @@ namespace TB.Application.Abstractions.Interfaces
     {
         IAuthRepository Auth { get; }
         IAppUserRepository AppUsers { get; }
+        IEmployeeRepository Employee { get; }
         IRoleRepository Roles { get; }
         IFinancialDataRepository FinancialData { get; }
-        IEmployeeRepository Employee { get; }
+        IDividendRepository Dividend { get; }
+        IEarningRepository Earning { get; }
+        IStockPriceRepository StockPrice { get; }
+        
 
         Task CompleteAsync();
     }
