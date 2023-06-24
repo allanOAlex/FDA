@@ -13,22 +13,13 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
     [TestFixture]
     public class EmployeeRepositoryTests
     {
-        private Mock<IConfiguration> mockConfiguration;
         private IConfiguration configuration;
-        private Mock<MyDBContext> mockContext;
-        private Mock<IDbConnection> mockConnection;
-
         private string connectionString;
 
 
         [SetUp]
         public void Setup()
         {
-            mockConfiguration = new Mock<IConfiguration>();
-            mockContext = new Mock<MyDBContext>();
-            mockConnection = new Mock<IDbConnection>();
-
-            // Build the configuration
             configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
@@ -40,9 +31,6 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
         [TearDown] 
         public void Teardown() 
         {
-            mockContext.Object.Dispose();
-            mockContext.Setup(c => c.Dispose()).Verifiable();
-            //mockContext.Verify();
 
         }  
         
@@ -98,7 +86,6 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
 
 
                     // Optionally, assert that the salary in the database has been updated correctly
-                    
                     Assert.That(updatedSalary, Is.EqualTo(employee!.Salary));
 
                     // Clean up the test data (e.g., delete the test employee record)
