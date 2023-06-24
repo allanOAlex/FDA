@@ -74,6 +74,11 @@
         
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+
+            <button type="submit" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" asp-action="ImportData" asp-controller="FinancialData">
+                Import Data
+            </button>
+
             <div class="input-group">
                 <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                 <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
@@ -102,17 +107,25 @@
                             <div class="sb-nav-link-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
                             Dashboard
                         </a>
-                        @*<a class="nav-link" asp-controller="User" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
-                            Users
-                        </a>*@
                         <a class="nav-link" asp-controller="FinancialData" asp-action="FetchFromUrl">
                             <div class="sb-nav-link-icon"><i class="bi bi-currency-exchange"></i></div>
-                            Financials
+                            Dividends
+                        </a>
+                        <a class="nav-link" asp-controller="FinancialData" asp-action="FetchFromUrl">
+                            <div class="sb-nav-link-icon"><i class="bi bi-currency-exchange"></i></div>
+                            Earnings
+                        </a>
+                        <a class="nav-link" asp-controller="FinancialData" asp-action="FetchFromUrl">
+                            <div class="sb-nav-link-icon"><i class="bi bi-currency-exchange"></i></div>
+                            Stock Prices
                         </a>
                         <a class="nav-link" asp-controller="Employee" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
                             Employees
+                        </a>
+                        <a class="nav-link" asp-controller="User" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="bi bi-people-fill"></i></div>
+                            Users
                         </a>
                     </div>
                 </div>

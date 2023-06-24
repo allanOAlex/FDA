@@ -1,0 +1,97 @@
+﻿@model IEnumerable<GetStockPriceResponse>
+
+@{
+
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        @ViewBag.Caption
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>CloseAdjusted</th>
+                    <th>Volume</th>
+                    <th>SplitCoefficient</th>
+                    <th>
+                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
+                            Add New
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                @if (Model != null)
+                {
+                    @if (Model!.Count() > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr style="font-size:15px">
+                                <td>@item.Symbol</td>
+                                <td>@item.Date</td>
+                                <td>@item.Open</td>
+                                <td>@item.High</td>
+                                <td>@item.Low</td>
+                                <td>@item.Close</td>
+                                <td>@item.CloseAdjusted</td>
+                                <td>@item.Volume</td>
+                                <td>@item.SplitCoefficient</td>
+                                <td>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
+                                        Details
+                                    </button>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
+                                        Delete
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="100">
+                                <br>
+                                <p>
+                                    <strong>
+                                        No records to display
+                                    </strong>
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="100">
+                            <br>
+                            <p>
+                                <strong>
+                                    No records to display
+                                </strong>
+                            </p>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
