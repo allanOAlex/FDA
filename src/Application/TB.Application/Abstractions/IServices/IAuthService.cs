@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TB.Shared.Requests.Auth;
 using TB.Shared.Responses.Auth;
 using TB.Shared.Responses.Autrh;

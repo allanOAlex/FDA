@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -14,10 +13,8 @@ using TB.Application.Abstractions.Interfaces;
 using TB.Application.Abstractions.IServices;
 using TB.Domain.Models;
 using TB.Infrastructure.Extensions;
-using TB.Shared.Constants;
 using TB.Shared.Exceptions.ModelExceptions;
 using TB.Shared.Requests.Auth;
-using TB.Shared.Requests.User;
 using TB.Shared.Responses.Auth;
 using TB.Shared.Responses.Autrh;
 

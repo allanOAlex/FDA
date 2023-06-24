@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using TB.Shared.Requests.Common;
 
 namespace TB.Shared.Requests.Employee
 {
     public record UpdateEmployeeSalaryRequest : Request
     {
-        public int NewSalary { get; set; }
+        [Required(ErrorMessage = "Salary is required")]
+        public int EmployeeId { get; set; }
+        public int Salary { get; set; }
     }
 }

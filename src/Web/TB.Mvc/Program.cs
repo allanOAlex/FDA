@@ -101,7 +101,7 @@ builder.Services.AddAuthentication((options) =>
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ClockSkew = TimeSpan.FromMinutes(Convert.ToDouble(jwtSettings.ClockSkew)),
+        ClockSkew = TimeSpan.Zero,
         ValidIssuer = jwtSettings.JwtIssuer,
         ValidAudience = jwtSettings.JwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.JwtSecurityKey!)),
@@ -112,7 +112,7 @@ builder.Services.AddAuthentication((options) =>
         RequireExpirationTime = true,
         LifetimeValidator = (notBefore, expires, token, parameters) =>
         {
-            return expires > DateTime.UtcNow; // check if token has not yet expired
+            return expires > DateTime.Now;
         }
 
     };
@@ -121,6 +121,7 @@ builder.Services.AddAuthentication((options) =>
         OnAuthenticationFailed = context => {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
+                context.Response.StatusCode = 1002;
                 context.Response.Headers.Add("TokenExpired", "true");
             }
             return Task.CompletedTask;

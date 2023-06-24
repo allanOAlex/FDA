@@ -5,7 +5,6 @@ using TB.Application.Abstractions.Interfaces;
 using TB.Mvc.Session;
 using TB.Shared.Requests.Employee;
 using TB.Shared.Responses.Employee;
-using TB.Shared.Responses.User;
 
 namespace TB.Mvc.Controllers
 {
@@ -43,9 +42,14 @@ namespace TB.Mvc.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UpdateEmployeeSalaryResponse>> UpdateEmployeeSalary(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
+        public async Task<ActionResult<UpdateEmployeeSalaryResponse>> UpdateEmployeeSalary(int employeeId, int salary)
         {
-            updateEmployeeSalaryRequest.Id = int.Parse(sessionDictionary["UserId"]);
+            UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest = new()
+            {
+                Id = employeeId,
+                Salary = salary
+            };
+
             var response = await serviceManager.EmployeeService.MySQL_Dapper_UpdateEmployeeSalaryAsync(updateEmployeeSalaryRequest);
 
             if (!response.Successful == true)

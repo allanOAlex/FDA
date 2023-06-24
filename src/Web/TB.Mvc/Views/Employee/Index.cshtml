@@ -2,6 +2,7 @@
 
 @{
     var createEmpRequest = new CreateEmployeeRequest();
+    var updateEmpSalaryRequest = new UpdateEmployeeSalaryRequest();
 }
 
 
@@ -17,7 +18,7 @@
                     <th>Name</th>
                     <th>Salary</th>
                     <th>
-                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
+                        <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createEmployeeModal">
                             Add New
                         </button>
                     </th>
@@ -35,16 +36,18 @@
                                 <td>@emp.Salary</td>
                                 
                                 <td>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
-                                        Details
-                                    </button>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
-                                        Edit
-                                    </button>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
                                         Delete
                                     </button>
-
+                                    <button type="button" class="edit-employee btn  btn-sm float-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#updateEmpSalaryModal" asp-route-id="@emp.Id" data-emp-id="@emp.Id" data-target="#updateEmpSalaryModal">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
+                                        View
+                                    </button>
+                                    
+                                    
+                                    <input type="hidden" class="emp-id" name="Id" value="@emp.Id" />
                                 </td>
                             </tr>
                         }
@@ -82,18 +85,18 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">
+<!-- Create Employee Modal -->
+<div class="modal fade" id="createEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createUserModalTitle">Edit Employee</h5>
+                <h5 class="modal-title" id="createUserModalTitle">Add Employee</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="createUserForm" asp-action="Create">
+                <form id="createEmployeeForm" asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row mb-3">
                         <div class="col-xs-12 col-sm-4 col-md-4">
@@ -113,11 +116,11 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col">
-                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetForm()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetCreateEmployeeForm()">
                                 Reset
                             </button>
 
-                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseModal()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseCreateEmployeeModal()">
                                 Cancel
                             </button>
 
@@ -132,15 +135,72 @@
     </div>
 </div>
 
+<!-- Update Salary Modal -->
+<div class="modal fade" id="updateEmpSalaryModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">uh
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserModalTitle">Update Salary</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateEmpSalaryForm" asp-action="UpdateEmployeeSalary">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row mb-3">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group mb-3">
+                                <input asp-for="@updateEmpSalaryRequest.EmployeeId" id="empID" name="EmployeeId" class="form-control" type="hidden" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="@updateEmpSalaryRequest.Salary" class="control-label"></label>
+                                <input asp-for="@updateEmpSalaryRequest.Salary" id="newSalary" name="Salary" class="form-control" />
+                                <span asp-validation-for="@updateEmpSalaryRequest.Salary" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetUpdateEmployeeSalaryForm()">
+                                Reset
+                            </button>
+
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseUpdateEmployeeSalaryModal()">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="btn  btn-sm loat-end m-1" style="background: #444d6a !important; color:#fff !important; text-transform: none;" >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @section Scripts{
+
     <script>
-        resetForm()
+        resetCreateEmployeeForm()
     </script>
 
     <script>
-        resetAndCloseModal();
+        resetAndCloseCreateEmployeeModal()
     </script>
+
+    <script>
+        resetUpdateEmployeeSalaryForm();
+    </script>
+
+    <script>
+        resetAndCloseUpdateEmployeeSalaryModal();
+    </script>
+
 
 
 }
