@@ -63,7 +63,7 @@ namespace TB.Infrastructure.Implementations.Services
                     IMapper responseMap = response.CreateMapper();
 
                     var destination = requestMap.Map<UpdateEmployeeSalaryRequest, Employee>(updateEmployeeSalaryRequest);
-                    var result = await unitOfWork.Employee.MySQL_Dapper_SP_UpdateEmployeeSalaryAsync(destination, out int oldSalary);
+                    var result = await unitOfWork.Employee.UpdateEmployeeSalaryAsync(destination, out int oldSalary);
                     var updateResponse = responseMap.Map<Employee, UpdateEmployeeSalaryResponse>(result);
                     
                     updateResponse.OldSalary = oldSalary;
