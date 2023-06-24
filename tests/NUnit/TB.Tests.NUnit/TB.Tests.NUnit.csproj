@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="MySqlConnector" Version="2.1.2" />
@@ -20,12 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure.Tests\Service.Tests\MockServices\" />
-    <Folder Include="Infrastructure.Tests\Service.Tests\Tests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\src\Application\TB.Application\TB.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\Infrastructure\TB.Infrastructure\TB.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\src\Persistence\TB.Persistence.MySQL\TB.Persistence.MySQL.csproj" />
     <ProjectReference Include="..\..\..\src\Persistence\TB.Persistence\TB.Persistence.csproj" />
   </ItemGroup>
