@@ -13,9 +13,13 @@ namespace TB.Infrastructure.Implementations.Interfaces
     {
         public IAuthRepository Auth { get; private set; }
         public IAppUserRepository AppUsers { get; private set; }
+        public IEmployeeRepository Employee { get; private set; }
         public IRoleRepository Roles { get; private set; }
         public IFinancialDataRepository FinancialData { get; private set; }
-        public IEmployeeRepository Employee { get; private set; }
+        public IDividendRepository Dividend { get; private set; }
+        public IEarningRepository Earning { get; private set; }
+        public IStockPriceRepository StockPrice { get; private set; }
+        
 
         private readonly DBContext context;
         private readonly MyDBContext myContext;
@@ -36,9 +40,13 @@ namespace TB.Infrastructure.Implementations.Interfaces
 
             Auth = new AuthRepository(signInManager, userManager, config);
             AppUsers = new AppUserRepository(context, daper, userManager);
+            Employee = new EmployeeRepository(config, myContext);
             Roles = new RoleRepository();
             FinancialData = new FinancialDataRepository(context);
-            Employee = new EmployeeRepository(config, myContext);
+            Dividend = new DividendRepository(myContext);
+            Earning = new EarningRepository(myContext);
+            StockPrice = new StockPriceRepository(myContext);
+            
         }
 
 
