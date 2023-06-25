@@ -9,5 +9,11 @@ namespace TB.Shared.Responses.FinancialData
 {
     public record GetEarningResponse : Response
     {
+        public string? Symbol { get; set; }
+        public DateTime Date { get; set; }
+        public string? Quater { get; set; }
+        public decimal EpsEst { get; set; }
+        public decimal Eps { get; set; }
+        public string? ReleaseTime { get; set; }
     }
 }

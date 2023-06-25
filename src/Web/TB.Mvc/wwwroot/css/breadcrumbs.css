@@ -1,0 +1,37 @@
+﻿/*.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+*/
+.breadcrumbs {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+    .breadcrumbs li {
+        margin-right: 10px;
+        display: inline;
+        margin-right: 10px;
+    }
+
+        .breadcrumbs li:last-child {
+            font-weight: bold;
+        }
+
+        .breadcrumbs li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+/*.btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}*/

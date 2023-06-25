@@ -33,7 +33,7 @@ namespace TB.Mvc.Controllers
         }
 
 
-        public async Task<ActionResult<FinancialDataDto>> Index()
+        public async Task<ActionResult<FinancialDataDto>> FetchAll()
         {
             ViewBag.Caption = "Financial Data";
             var response = await serviceManager.FinancialDataService.FindAll();
@@ -113,6 +113,7 @@ namespace TB.Mvc.Controllers
 
         }
 
+        [HttpPost]
         public async Task<ActionResult<GetCorrelationResponse>> GetCorrelation(GetCorrelationRequest getCorrelationRequest)
         {
             ViewBag.Caption = "Correlation";
