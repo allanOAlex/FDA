@@ -5,11 +5,14 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using TB.Application.Abstractions.Interfaces;
+using TB.Domain.Models;
 using TB.Mvc.AuthProviders;
 using TB.Mvc.Session;
 using TB.Shared.Constants;
+using TB.Shared.Dtos;
 using TB.Shared.Requests.Auth;
 using TB.Shared.Responses.Auth;
+using TB.Shared.Responses.FinancialData;
 
 namespace TB.Mvc.Controllers
 {
@@ -66,11 +69,16 @@ namespace TB.Mvc.Controllers
                 sessionDictionary["Name"] = $"{response!.FirstName} {response!.LastName}";
                 await HttpContext.Session.CommitAsync();
 
+                
                 ViewBag.Success = response!.Successful;
                 ViewBag.Message = response.Message;
                 ViewBag.JwtToken = response!.Token;
                 ViewBag.UserId = sessionDictionary["UserId"];
                 ViewBag.Name = sessionDictionary["Name"];
+
+                ViewBag.DividendsCaption = "Dividends Data";
+                ViewBag.EarningsCaption = "Earnings Data";
+                ViewBag.StockPriceCaption = "Stock Price Data";
 
                 var authState = await ((CustomAuthStateProvider)authStateProvider).GetAuthenticationStateAsync();
                 ((CustomAuthStateProvider)authStateProvider).MarkUserAsAuthenticated(response);
@@ -81,7 +89,8 @@ namespace TB.Mvc.Controllers
 
                 sessionDictionary["UserClaims"] = $"{authState.User.Claims}";
 
-                return View("Dashboard", response);
+                return RedirectToAction("Dashboard", "Home", response);
+
             }
             catch (Exception)
             {

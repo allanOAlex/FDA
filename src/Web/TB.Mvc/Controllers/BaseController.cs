@@ -18,6 +18,7 @@ namespace TB.Mvc.Controllers
             {
                 if (!string.IsNullOrEmpty(sessionDictionary["UserId"]))
                 {
+                    
                     ViewBag.Name = sessionDictionary["Name"];
                     ViewBag.UserId = int.Parse(sessionDictionary["UserId"]);
                 }

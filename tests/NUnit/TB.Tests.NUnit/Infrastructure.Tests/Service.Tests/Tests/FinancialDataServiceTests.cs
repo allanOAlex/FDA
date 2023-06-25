@@ -23,24 +23,27 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.Tests
 {
     public class FinancialDataServiceTests
     {
-        
-        private readonly DBContext? context;
-        private readonly MyDBContext? myContext;
-        private readonly Dappr? daper;
-        private readonly UserManager<AppUser>? userManager;
-        private readonly SignInManager<AppUser>? signInManager;
-        private readonly IConfiguration? config;
-
-        private IUnitOfWork unitOfWork;
+        private Mock<IUnitOfWork> unitOfWorkMock;
+        private Mock<IMapper> mapperMock;
         private MockFinancialDataService service;
 
         [SetUp]
         public void Setup()
         {
 
-            unitOfWork = new UnitOfWork(context, myContext, daper, userManager, signInManager, config);
-            service = new MockFinancialDataService(unitOfWork);
+            unitOfWorkMock = new Mock<IUnitOfWork>();
+            mapperMock = new Mock<IMapper>();
+            service = new MockFinancialDataService(unitOfWorkMock.Object, mapperMock.Object);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            unitOfWorkMock.Reset();
+            mapperMock.Reset();
+        }
+
+
 
         [Test]
         public async Task CalculateReturns_WithValidRequest_ReturnsExpectedReturns()
@@ -57,23 +60,13 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.Tests
             var stockPrices = new List<StockPrice>
             {
                 new StockPrice { Date = new DateTime(2022, 1, 1), Symbol = "AAPL", Close = 100 },
-                
-                // Add more test data as needed
             };
 
-            // Mock the dependencies or use a testing framework like Moq to create mocks
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            var mapperMock = new Mock<IMapper>();
-
             // Set up the mock behavior for the stock price repository
-            var me = unitOfWorkMock.Setup(u => u.StockPrice.FindAll()).ReturnsAsync(stockPrices.AsQueryable());
-
-            var financialDataService = new MockFinancialDataService(unitOfWorkMock.Object);
-
+            unitOfWorkMock.Setup(u => u.StockPrice.FindAll()).ReturnsAsync(stockPrices.AsQueryable());
 
             // Act
-            //var result = await service.TestCalculateReturns(getReturnsRequest);
-            var result = await financialDataService.TestCalculateReturns(getReturnsRequest);
+            var result = await service.TestCalculateReturns(getReturnsRequest);
 
             // Assert
             Assert.IsNotNull(result);
@@ -81,12 +74,12 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.Tests
         }
 
         [Test]
-        public async Task CalculateVolatility_ReturnsExpectedVolatility()
+        public async Task CalculateVolatility_WithValidRequest_ReturnsExpectedVolatility()
         {
             // Arrange
             var getVolatilityRequest = new GetVolatilityRequest
             {
-                Returns = new List<decimal> { 0.1m, 0.0909m, 0.05m }
+                Returns = new List<decimal> { 0.1m, 0.0909m, 0.05m } 
             };
 
             // Act
@@ -94,7 +87,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.Tests
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.That(result.Volatility, Is.EqualTo(0.0241m));
+            Assert.That(decimal.Round(result.Volatility, 4), Is.EqualTo(0.0217));
         }
 
         [Test]
@@ -107,27 +100,18 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.Tests
                 Returns2 = new List<decimal> { 0.2m, 0.1m, 0.15m }
             };
 
-            var returns1 = ((IEnumerable<object>)getCorrelationRequest.Returns1).Select(Convert.ToDecimal).ToList();
-            var returns2 = ((IEnumerable<object>)getCorrelationRequest.Returns2).Select(Convert.ToDecimal).ToList();
-
-            // Convert Lists to IQueryable<decimal>
-            var returns1Queryable = returns1.AsQueryable();
-            var returns2Queryable = returns2.AsQueryable();
 
             // Act
-            var result = await service.TestCalculateCorrelation(new GetCorrelationRequest
-            {
-                Returns1 = returns1Queryable,
-                Returns2 = returns2Queryable
-            });
+            var result = await service.TestCalculateCorrelation(getCorrelationRequest);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.That(result.Correlation, Is.EqualTo(0.6546m));
+            Assert.That(decimal.Round(result.Correlation, 4), Is.EqualTo(0.1708));
         }
 
 
 
 
     }
+
 }

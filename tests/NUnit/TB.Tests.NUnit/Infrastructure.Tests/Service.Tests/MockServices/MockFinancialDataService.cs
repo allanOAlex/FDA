@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.Statistics;
+﻿using AutoMapper;
+using MathNet.Numerics.Statistics;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto;
 using System;
@@ -15,10 +16,12 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.MockServices
     internal sealed class MockFinancialDataService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public MockFinancialDataService(IUnitOfWork UnitOfWork)
+        public MockFinancialDataService(IUnitOfWork UnitOfWork, IMapper Mapper)
         {
             unitOfWork = UnitOfWork;
+            mapper = Mapper;
         }
 
         public async Task<GetReturnsResponse> TestCalculateReturns(GetReturnsRequest getReturnsRequest)
@@ -101,10 +104,10 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.MockServices
         {
             try
             {
-                var returnArray1 = await ((IQueryable<decimal>)getCorrelationRequest.Returns1!).Select(x => (double)x).ToArrayAsync(); 
-                var returnArray2 = await ((IQueryable<decimal>)getCorrelationRequest.Returns2!).Select(x => (double)x).ToArrayAsync();
+                var returns1 = ((IEnumerable<decimal>)getCorrelationRequest.Returns1!).Select(x => (double)x);
+                var returns2 = ((IEnumerable<decimal>)getCorrelationRequest.Returns2!).Select(x => (double)x);
 
-                decimal correlationValue = (decimal)Correlation.Pearson(returnArray1, returnArray2);
+                decimal correlationValue = (decimal)Correlation.Pearson(returns1, returns2);
 
                 var correlation = new GetCorrelationResponse
                 {
@@ -118,6 +121,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Service.Tests.MockServices
                 throw;
             }
         }
+
 
 
 
