@@ -56,7 +56,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
-        public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalary_RollBack(Employee employee)
+        public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalaryAsync(Employee employee)
         {
             try
             {

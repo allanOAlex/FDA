@@ -58,7 +58,16 @@ namespace TB.Mvc.Middleware
                 }
                 else
                 {
-                    await next(context);    
+                    try
+                    {
+                        await next(context);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                       
                 }
                 
 

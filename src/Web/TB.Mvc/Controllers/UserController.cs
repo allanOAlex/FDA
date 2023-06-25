@@ -41,7 +41,7 @@ namespace TB.Mvc.Controllers
                 return View(response);
             }
 
-            return View(response.AsEnumerable());
+            return View("Index", response.AsEnumerable());
 
         }
 

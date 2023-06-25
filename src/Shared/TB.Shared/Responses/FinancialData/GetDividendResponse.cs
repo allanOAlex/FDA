@@ -9,5 +9,7 @@ namespace TB.Shared.Responses.FinancialData
 {
     public record GetDividendResponse : Response
     {
+        public string? Symbol { get; set; }
+        public decimal Dividends { get; set; }
     }
 }

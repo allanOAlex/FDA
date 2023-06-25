@@ -7,6 +7,7 @@ using System.Data;
 using TB.Domain.Models;
 using TB.Persistence.MySQL.MySQL;
 using TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
 {
@@ -31,7 +32,19 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
         [TearDown] 
         public void Teardown() 
         {
+            var options = new DbContextOptionsBuilder<MyDBContext>()
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+            .Options;
 
+            using (var context = new MyDBContext(options))
+            {
+                var testEmployees = context.Employees!
+                    .Where(e => e.Name!.Contains("Test"))
+                    .ToListAsync();
+
+                context.Employees.RemoveRange(testEmployees.Result);
+                context.SaveChangesAsync();
+            }
         }  
         
 
@@ -104,7 +117,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
         }
 
         [Test]
-        public async Task TestUpdatesEmployeeSalary_RollBack()
+        public async Task TestUpdatesEmployeeSalaryAsync()
         {
             var options = new DbContextOptionsBuilder<MyDBContext>()
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
@@ -132,38 +145,43 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
                     Salary = initialSalary
                 };
 
-                // Start the transaction
-                using (var transaction = await context.Database.BeginTransactionAsync())
+                try
                 {
-                    try
+                    context.Employees!.Add(newEmployee);
+                    await context.SaveChangesAsync();
+
+                    // Act
+                    var employee = new Employee
                     {
-                        context.Employees!.Add(newEmployee);
-                        await context.SaveChangesAsync();
+                        Id = lastId + 1,
+                        Salary = updatedSalary
+                    };
 
-                        // Act
-                        var employee = new Employee
-                        {
-                            Id = lastId + 1,
-                            Salary = updatedSalary
-                        };
+                    var result = await repository.TestUpdatesEmployeeSalaryAsync(employee);
+                    await context.SaveChangesAsync();
 
-                        var result = await repository.TestUpdatesEmployeeSalary_RollBack(employee);
 
-                        // Assert
-                        Assert.That(updatedSalary, Is.Not.EqualTo(result.OldSalary));
+                    // Assert
+                    Assert.That(updatedSalary, Is.Not.EqualTo(result.OldSalary));
 
-                        // Optionally, assert that the salary in the database has been updated correctly
-                        var updatedEmployee = await context.Employees.FindAsync(employee.Id);
-                        Assert.That(updatedSalary, Is.EqualTo(updatedEmployee!.Salary));
 
-                        // Roll back the transaction
-                        await transaction.RollbackAsync();
-                    }
-                    finally
-                    {
-                        transaction.Dispose();
-                    }
+                    // Clean up the test data (e.g., delete the test employee record)
+                    var updatedEmployee = await context.Employees.FindAsync(employee.Id);
+                    context.Employees.Remove(updatedEmployee!);
+                    await context.SaveChangesAsync();
+
+                    context.Entry(newEmployee).State = EntityState.Detached;
+
                 }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+
+                }
+
             }
 
             
