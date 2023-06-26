@@ -11,34 +11,26 @@
     var stockPrices = Model.StockPrices;
 }
 
-<div class="row d-flex justify-content-center">
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-4">
-            <div class="card-body">Dividends</div>
+<div class="row " style="display:flex; flex-flow: row wrap;">
+    <div class="col">
+        <div class="card data-card bg-primary text-white mb-4">
+            <div class="card-body">User Count</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="#">View Details</a>
                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-warning text-white mb-4">
-            <div class="card-body">Earnings</div>
+    <div class="col">
+        <div class="card data-card bg-warning text-white mb-4">
+            <div class="card-body">Employee Count</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="#">View Details</a>
                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-4">
-            <div class="card-body">Stock Prices</div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="#">View Details</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <div class="row">
@@ -73,14 +65,14 @@
             @ViewBag.DividendsCaption
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="datatablesSimple">
+            <table class="dataTable">
                 <thead>
                     <tr>
                         <th>Symbol</th>
                         <th>Dividends</th>
                         <th>
-                            <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
-                                Add New
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                                Fetch
                             </button>
                         </th>
                     </tr>
@@ -96,48 +88,12 @@
                                 <tr style="font-size:15px">
                                     <td>@dividend.Symbol</td>
                                     <td>@dividend.Dividends</td>
-                                    
-                                    <td>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
-                                            Details
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
-                                            Edit
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
-                                            Delete
-                                        </button>
 
-                                    </td>
                                 </tr>
                             }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="100">
-                                        <br>
-                                        <p>
-                                            <strong>
-                                                No records to display
-                                            </strong>
-                                        </p>
-                                    </td>
-                                </tr>
-                            }
+
                         }
-                        else
-                        {
-                            <tr>
-                                <td colspan="100">
-                                    <br>
-                                    <p>
-                                        <strong>
-                                            No records to display
-                                        </strong>
-                                    </p>
-                                </td>
-                            </tr>
-                        }
+
 
                     }
 
@@ -154,7 +110,7 @@
             @ViewBag.EarningsCaption
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="datatablesSimple">
+            <table class="dataTable">
                 <thead>
                     <tr>
                         <th>Symbol</th>
@@ -164,8 +120,8 @@
                         <th>Eps</th>
                         <th>Release Time</th>
                         <th>
-                            <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
-                                Add New
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                                Fetch
                             </button>
                         </th>
                     </tr>
@@ -185,47 +141,12 @@
                                     <td>@earning.EpsEst</td>
                                     <td>@earning.Eps</td>
                                     <td>@earning.ReleaseTime</td>
-                                    <td>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
-                                            Details
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
-                                            Edit
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
-                                            Delete
-                                        </button>
 
-                                    </td>
                                 </tr>
                             }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="100">
-                                        <br>
-                                        <p>
-                                            <strong>
-                                                No records to display
-                                            </strong>
-                                        </p>
-                                    </td>
-                                </tr>
-                            }
+
                         }
-                        else
-                        {
-                            <tr>
-                                <td colspan="100">
-                                    <br>
-                                    <p>
-                                        <strong>
-                                            No records to display
-                                        </strong>
-                                    </p>
-                                </td>
-                            </tr>
-                        }
+
 
                     }
 
@@ -242,7 +163,7 @@
             @ViewBag.StockPriceCaption
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="datatablesSimple">
+            <table class="dataTable">
                 <thead>
                     <tr>
                         <th>Symbol</th>
@@ -255,7 +176,7 @@
                         <th>Volume</th>
                         <th>Split Coefficient</th>
                         <th>
-                            <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
                                 Add New
                             </button>
                         </th>
@@ -279,47 +200,12 @@
                                     <td>@stockPrice.CloseAdjusted</td>
                                     <td>@stockPrice.Volume</td>
                                     <td>@stockPrice.SplitCoefficient</td>
-                                    <td>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
-                                            Details
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
-                                            Edit
-                                        </button>
-                                        <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
-                                            Delete
-                                        </button>
 
-                                    </td>
                                 </tr>
                             }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="100">
-                                        <br>
-                                        <p>
-                                            <strong>
-                                                No records to display
-                                            </strong>
-                                        </p>
-                                    </td>
-                                </tr>
-                            }
+
                         }
-                        else
-                        {
-                            <tr>
-                                <td colspan="100">
-                                    <br>
-                                    <p>
-                                        <strong>
-                                            No records to display
-                                        </strong>
-                                    </p>
-                                </td>
-                            </tr>
-                        }
+
 
                     }
 
@@ -342,6 +228,7 @@ else
         </td>
     </tr>
 }
+
 
 
 @section Scripts{

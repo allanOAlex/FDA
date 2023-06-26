@@ -55,6 +55,8 @@ namespace TB.Mvc.Controllers
                     return View(response);
                 }
 
+                var financialData = await serviceManager.FinancialDataService.FindAll();
+
                 StatusCode(StatusCodes.Status200OK, response);
                 AppConstants.AuthToken = response!.Token;
                 AppConstants.SessionStartTime = DateTime.Now.ToString();
@@ -70,15 +72,14 @@ namespace TB.Mvc.Controllers
                 await HttpContext.Session.CommitAsync();
 
                 
+                ViewBag.Show = true;
                 ViewBag.Success = response!.Successful;
                 ViewBag.Message = response.Message;
                 ViewBag.JwtToken = response!.Token;
                 ViewBag.UserId = sessionDictionary["UserId"];
                 ViewBag.Name = sessionDictionary["Name"];
 
-                ViewBag.DividendsCaption = "Dividends Data";
-                ViewBag.EarningsCaption = "Earnings Data";
-                ViewBag.StockPriceCaption = "Stock Price Data";
+                
 
                 var authState = await ((CustomAuthStateProvider)authStateProvider).GetAuthenticationStateAsync();
                 ((CustomAuthStateProvider)authStateProvider).MarkUserAsAuthenticated(response);
@@ -89,7 +90,7 @@ namespace TB.Mvc.Controllers
 
                 sessionDictionary["UserClaims"] = $"{authState.User.Claims}";
 
-                return RedirectToAction("Dashboard", "Home", response);
+                return View("Dashboard", financialData);
 
             }
             catch (Exception)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TB.Application.Abstractions.Interfaces;
 using TB.Mvc.Models;
 using TB.Shared.Dtos;
 using TB.Shared.Responses.FinancialData;
@@ -8,11 +9,13 @@ namespace TB.Mvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
+        private readonly IServiceManager serviceManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> Logger, IServiceManager ServiceManager)
         {
-            _logger = logger;
+            logger = Logger;
+            serviceManager = ServiceManager;
         }
 
         public IActionResult Index()
@@ -20,18 +23,20 @@ namespace TB.Mvc.Controllers
             return View();
         }
 
-        public IActionResult DashBoard()
+        public async Task<ActionResult> DashBoard()
         {
-            var dashResponse = new FinancialDataDto
+            try
             {
-                Dividends = new List<GetDividendResponse>
+                var dashResponse = new FinancialDataDto
+                {
+                    Dividends = new List<GetDividendResponse>
                     {
                         new GetDividendResponse { Id = 1, Symbol = "AAPL", Dividends = 0.5m },
                         new GetDividendResponse { Id = 2, Symbol = "GOOGL", Dividends = 1.2m },
                         new GetDividendResponse { Id = 3, Symbol = "MSFT", Dividends = 0.8m }
                     },
 
-                Earnings = new List<GetEarningResponse>
+                    Earnings = new List<GetEarningResponse>
                     {
                         new GetEarningResponse { Id = 1, Symbol = "AAPL", Date = new DateTime(2022, 1, 1), Quater = "Q1", EpsEst = 1.2m, Eps = 1.5m, ReleaseTime = "8:00 AM" },
 
@@ -40,7 +45,7 @@ namespace TB.Mvc.Controllers
                         new GetEarningResponse { Id = 3, Symbol = "MSFT", Date = new DateTime(2022, 1, 1), Quater = "Q1", EpsEst = 1.8m, Eps = 2.2m, ReleaseTime = "10:00 AM" }
                     },
 
-                StockPrices = new List<GetStockPriceResponse>
+                    StockPrices = new List<GetStockPriceResponse>
                     {
                         new GetStockPriceResponse { Id = 1, Symbol = "AAPL", Date = new DateTime(2022, 1, 1), Open = 150m, High = 160m, Low = 145m, Close = 155m, CloseAdjusted = 152m, Volume = 10000, SplitCoefficient = 1m },
 
@@ -50,11 +55,23 @@ namespace TB.Mvc.Controllers
                     }
 
 
-            };
+                };
 
-            ViewBag.Show = true;
+                var financialData = await serviceManager.FinancialDataService.FindAll();
 
-            return View("Dashboard", dashResponse);
+                ViewBag.Show = true;
+                ViewBag.DividendsCaption = "Dividends Data";
+                ViewBag.EarningsCaption = "Earnings Data";
+                ViewBag.StockPriceCaption = "Stock Price Data";
+
+                return View(financialData);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         public IActionResult Privacy()

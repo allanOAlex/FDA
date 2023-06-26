@@ -46,16 +46,57 @@ namespace TB.Mvc.Controllers
 
         }
 
+        public async Task<ActionResult<List<GetDividendResponse>>> Dividends()
+        {
+            ViewBag.Caption = "Dividends";
+            var response = await serviceManager.FinancialDataService.Dividends();
+            if (response.Count() <= 0)
+            {
+                return View(response);
+            }
+
+            return View(response);
+
+        }
+
+        public async Task<ActionResult<List<GetEarningResponse>>> Earnings()
+        {
+            ViewBag.Caption = "Earnings";
+            var response = await serviceManager.FinancialDataService.Earnings();
+            if (response.Count() <= 0)
+            {
+                return View(response);
+            }
+
+            return View(response);
+
+        }
+
+        public async Task<ActionResult<List<GetStockPriceResponse>>> StockPrices()
+        {
+            ViewBag.Caption = "Stock Prices";
+            var response = await serviceManager.FinancialDataService.StockPrices();
+            if (response.Count() <= 0)
+            {
+                return View(response);
+            }
+
+            return View(response);
+
+        }
+
+
+
         public async Task<ActionResult<List<GetDividendResponse>>> FetchDividends(GetFinancialDataRequest getFinancialDataRequest)
         {
             ViewBag.Caption = "Dividends";
             var response = await serviceManager.FinancialDataService.FetchDividends(getFinancialDataRequest);
             if (response!.Count <= 0)
             {
-                return View(response);
+                return Json(response);
             }
 
-            return View(response.AsEnumerable());
+            return Json(response);
 
         }
 
@@ -65,10 +106,10 @@ namespace TB.Mvc.Controllers
             var response = await serviceManager.FinancialDataService.FetchEarnings(getFinancialDataRequest);
             if (response!.Count <= 0)
             {
-                return View(response);
+                return Json(response);
             }
 
-            return View(response.AsEnumerable());
+            return Json(response);
 
         }
 
@@ -78,10 +119,10 @@ namespace TB.Mvc.Controllers
             var response = await serviceManager.FinancialDataService.FetchStockPrices(getFinancialDataRequest);
             if (response!.Count <= 0)
             {
-                return View(response);
+                return Json(response);
             }
 
-            return View(response.AsEnumerable());
+            return Json(response);
 
         }
 

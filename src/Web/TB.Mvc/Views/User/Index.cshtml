@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<GetAllUsersResponse>
 
 @{
-    //Layout = "_LayoutDashboard";
     var createUserRequest = new CreateUserRequest();
 }
 
@@ -12,7 +11,7 @@
         @ViewBag.Caption
     </div>
     <div class="card-body">
-        <table id="usersTable" class="datatablesSimple">
+        <table class="dataTable">
             <thead>
                 <tr>
                     <th>First Name</th>
@@ -20,22 +19,13 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>
-                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
+                        <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createUserModal">
                             Add New
                         </button>
                     </th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </tfoot>
+            
             <tbody>
                 @if (Model != null)
                 {
@@ -49,13 +39,13 @@
                                 <td>@item.Email</td>
                                 <td>@item.Phone</td>
                                 <td>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
                                         Details
                                     </button>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Edit">
                                         Edit
                                     </button>
-                                    <button type="button" class="btn  btn-sm loat-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
                                         Delete
                                     </button>
 

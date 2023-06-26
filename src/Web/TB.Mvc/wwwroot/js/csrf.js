@@ -5,18 +5,6 @@ $("form").submit(function (e) {
     }
 });
 
-// Set up default AJAX settings
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!settings.crossDomain) {
-            // Get the CSRF token value
-            var token = $('input[name="__RequestVerificationToken"]').val();
-
-            // Add the CSRF token header to the AJAX request
-            xhr.setRequestHeader("X-CSRF-TOKEN", token);
-        }
-    },
-});
 
 function isTokenExpired() {
     var token = localStorage.getItem("authToken");
@@ -33,9 +21,10 @@ function getTokenExpirationDate(token) {
 
 function parseJwt(token) {
     var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var base64 = base64Url.replace(/-/g, "+");
+    var component = base64.replace(/_/g, "/");
     var jsonPayload = decodeURIComponent(
-        atob(base64)
+        atob(component)
             .split("")
             .map(function (c) {
                 return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
