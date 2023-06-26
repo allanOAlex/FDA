@@ -42,7 +42,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
                     .Where(e => e.Name!.Contains("Test"))
                     .ToListAsync();
 
-                context.Employees.RemoveRange(testEmployees.Result);
+                context.Employees!.RemoveRange(testEmployees.Result);
                 context.SaveChangesAsync();
             }
         }  

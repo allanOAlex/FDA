@@ -55,3 +55,6 @@ body {
     opacity: 0.5;
 }
 
+.data-card {
+    flex: 1 0 25% !important;
+}

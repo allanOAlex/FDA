@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,9 +30,9 @@ namespace TB.Infrastructure.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<Earning>> FindAll()
+        public async Task<IQueryable<Earning>> FindAll()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(context.Earnings!.OrderByDescending(e => e.Id).AsNoTracking());
         }
 
         public Task<IQueryable<Earning>> FindByCondition(Expression<Func<Earning, bool>> expression)

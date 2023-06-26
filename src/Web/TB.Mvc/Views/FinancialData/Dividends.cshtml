@@ -1,0 +1,71 @@
+﻿@model IEnumerable<GetDividendResponse>
+
+@{
+
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        @ViewBag.Caption
+    </div>
+    <div class="card-body">
+        <table class="dataTable">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Dividends</th>
+                    <th>
+                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" asp-action="FetchDividends" asp-controller="FinancialData">
+                            Fetch
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null)
+                {
+                    @if (Model!.Count() > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr style="font-size:15px">
+                                <td>@item.Symbol</td>
+                                <td>@item.Dividends</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="100">
+                                <br>
+                                <p>
+                                    <strong>
+                                        No records to display
+                                    </strong>
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="100">
+                            <br>
+                            <p>
+                                <strong>
+                                    No records to display
+                                </strong>
+                            </p>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

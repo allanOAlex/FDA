@@ -1,0 +1,61 @@
+﻿@model IEnumerable<GetStockPriceResponse>
+
+@{
+
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        @ViewBag.Caption
+    </div>
+    <div class="card-body">
+        <table class="dataTable">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>Close Adjusted</th>
+                    <th>Volume</th>
+                    <th>Split Coefficient</th>
+                    <th>
+                        <button type="button" class="btn btn-primary btn-sm" style="background: #444d6a !important; color:#fff !important;" asp-action="FetchStockPrices" asp-controller="FinancialData">
+                            Fetch
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null)
+                {
+                    @if (Model!.Count() > 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr style="font-size:15px">
+                                <td>@item.Symbol</td>
+                                <td>@item.Date</td>
+                                <td>@item.Open</td>
+                                <td>@item.High</td>
+                                <td>@item.Low</td>
+                                <td>@item.Close</td>
+                                <td>@item.CloseAdjusted</td>
+                                <td>@item.Volume</td>
+                                <td>@item.SplitCoefficient</td>
+                            </tr>
+                        }
+                    }
+                    
+                }
+                
+
+            </tbody>
+        </table>
+    </div>
+</div>

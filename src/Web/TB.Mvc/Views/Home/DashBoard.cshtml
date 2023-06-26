@@ -1,0 +1,243 @@
+﻿@model FinancialDataDto
+@inject SessionDictionary<string> sessionDictionary;
+
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var userId = int.Parse(sessionDictionary["UserId"]);
+
+    var dividends = Model.Dividends;
+    var earnings = Model.Earnings;
+    var stockPrices = Model.StockPrices;
+}
+
+<div class="row " style="display:flex; flex-flow: row wrap;">
+    <div class="col">
+        <div class="card data-card bg-primary text-white mb-4">
+            <div class="card-body">User Count</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card data-card bg-warning text-white mb-4">
+            <div class="card-body">Employee Count</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="#">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1"></i>
+                Volatility
+            </div>
+            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-bar me-1"></i>
+                Correlation
+            </div>
+            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model != null)
+{
+    @* ----- Dividends ----- *@
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            @ViewBag.DividendsCaption
+        </div>
+        <div class="card-body">
+            <table class="dataTable">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Dividends</th>
+                        <th>
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" >
+                                Fetch
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var dividend in dividends!)
+                    {
+                        @if (dividends != null)
+                        {
+                            @if (dividends.Count() > 0)
+                            {
+                                <tr style="font-size:15px">
+                                    <td>@dividend.Symbol</td>
+                                    <td>@dividend.Dividends</td>
+
+                                </tr>
+                            }
+                            
+                        }
+                        
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* ----- Earnings ----- *@
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            @ViewBag.EarningsCaption
+        </div>
+        <div class="card-body">
+            <table class="dataTable">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Date</th>
+                        <th>Quater</th>
+                        <th>Eps Est</th>
+                        <th>Eps</th>
+                        <th>Release Time</th>
+                        <th>
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                                Fetch
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var earning in earnings!)
+                    {
+                        @if (earnings != null)
+                        {
+                            @if (earnings.Count() > 0)
+                            {
+                                <tr style="font-size:15px">
+                                    <td>@earning.Symbol</td>
+                                    <td>@earning.Date</td>
+                                    <td>@earning.Quater</td>
+                                    <td>@earning.EpsEst</td>
+                                    <td>@earning.Eps</td>
+                                    <td>@earning.ReleaseTime</td>
+                                    
+                                </tr>
+                            }
+                            
+                        }
+                        
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* -----StockPrice----- *@
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            @ViewBag.StockPriceCaption
+        </div>
+        <div class="card-body">
+            <table class="dataTable">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Date</th>
+                        <th>Open</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Close</th>
+                        <th>Close Adjusted</th>
+                        <th>Volume</th>
+                        <th>Split Coefficient</th>
+                        <th>
+                            <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" >
+                                Add New
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var stockPrice in stockPrices!)
+                    {
+                        @if (stockPrices != null)
+                        {
+                            @if (stockPrices.Count() > 0)
+                            {
+                                <tr style="font-size:15px">
+                                    <td>@stockPrice.Symbol</td>
+                                    <td>@stockPrice.Date</td>
+                                    <td>@stockPrice.Open</td>
+                                    <td>@stockPrice.High</td>
+                                    <td>@stockPrice.Low</td>
+                                    <td>@stockPrice.Close</td>
+                                    <td>@stockPrice.CloseAdjusted</td>
+                                    <td>@stockPrice.Volume</td>
+                                    <td>@stockPrice.SplitCoefficient</td>
+                                    
+                                </tr>
+                            }
+                            
+                        }
+                        
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+else
+{
+    <tr>
+        <td colspan="100">
+            <br>
+            <p>
+                <strong>
+                    Nothing to display here.
+                </strong>
+            </p>
+        </td>
+    </tr>
+}
+
+
+@section Scripts{
+
+    <script>
+        var jwtToken = '@ViewBag.JwtToken';
+        saveTokenToLocalStorage(jwtToken);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="~/sb/assets/demo/chart-area-demo.js"></script>
+    <script src="~/sb/assets/demo/chart-bar-demo.js"></script>
+}
