@@ -18,7 +18,7 @@
                     <th>Name</th>
                     <th>Salary</th>
                     <th>
-                        <button type="button" class="btn btn-primary btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createEmployeeModal">
+                        <button type="button" class="btn btn-sm float-end" style="background: #444d6a !important; color:#fff !important;" data-toggle="modal" data-target="#createEmployeeModal">
                             Add New
                         </button>
                     </th>
@@ -36,13 +36,13 @@
                                 <td>@emp.Salary</td>
                                 
                                 <td>
-                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
                                         Delete
                                     </button>
-                                    <button type="button" class="edit-employee btn  btn-sm float-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-toggle="modal" data-target="#updateEmpSalaryModal" asp-route-id="@emp.Id" data-emp-id="@emp.Id" data-target="#updateEmpSalaryModal">
+                                    <button type="button" class="edit-employee btn  btn-sm float-end m-1" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" data-bs-toggle="modal" data-bs-target="#updateEmpSalaryModal" asp-route-id="@emp.Id" data-emp-id="@emp.Id" >
                                         Edit
                                     </button>
-                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-toggle="modal" data-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
+                                    <button type="button" class="btn  btn-sm float-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" asp-controller="User" asp-action="Details">
                                         View
                                     </button>
                                     
@@ -91,7 +91,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createUserModalTitle">Add Employee</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
                 </button>
             </div>
@@ -141,7 +141,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createUserModalTitle">Update Salary</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
                 </button>
             </div>
@@ -166,7 +166,7 @@
                                 Reset
                             </button>
 
-                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseUpdateEmployeeSalaryModal()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-bs-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseUpdateEmployeeSalaryModal()">
                                 Cancel
                             </button>
 
