@@ -9,7 +9,7 @@ $(document).ready(function () {
     function showOverlay() {
         overlayTimer = setTimeout(function () {
             $("#lockScreenOverlay").addClass("show-overlay");
-        }, 600000);
+        }, 10000);
     }
 
     function hideOverlay() {
@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     setInterval(function () {
         idleTime++;
-        if (idleTime >= 600) {
+        if (idleTime >= 10) {
             showOverlay();
         }
     }, 1000);

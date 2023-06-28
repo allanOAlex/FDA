@@ -56,6 +56,38 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
+        public async Task<(Employee, int)> TestUpdatesEmployeeSalaryAsync_(Employee employee)
+        {
+            try
+            {
+                using (IDbConnection connection = new MySqlConnection(configuration.GetConnectionString("TBMS")))
+                {
+                    connection.Open();
+                    var parameters = new DynamicParameters(); 
+                    parameters.Add("@empID", employee.Id);
+                    parameters.Add("@newSalary", employee.Salary);
+                    parameters.Add("@oldSalary", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    var result = await connection.ExecuteAsync("UpdateEmployeeSalary", parameters, commandType: CommandType.StoredProcedure);
+
+                    object oldSalaryObj = parameters.Get<object>("@oldSalary");
+                    int oldSalary = (oldSalaryObj != DBNull.Value) ? Convert.ToInt32(oldSalaryObj) : 0;
+
+                    if (!string.IsNullOrEmpty(oldSalary.ToString()))
+                    {
+                        return (employee, oldSalary);
+                    }
+
+                    throw new Exception("Error updating employee salary");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
         public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalaryAsync(Employee employee)
         {
             try
