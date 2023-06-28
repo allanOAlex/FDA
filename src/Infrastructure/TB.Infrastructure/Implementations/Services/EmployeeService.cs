@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TB.Application.Abstractions.Interfaces;
 using TB.Application.Abstractions.IServices;
 using TB.Domain.Models;
 using TB.Shared.Requests.Employee;
 using TB.Shared.Responses.Employee;
+using TB.Shared.Responses.User;
 
 namespace TB.Infrastructure.Implementations.Services
 {
@@ -65,13 +67,24 @@ namespace TB.Infrastructure.Implementations.Services
                     var destination = requestMap.Map<UpdateEmployeeSalaryRequest, Employee>(updateEmployeeSalaryRequest);
                     var result = await unitOfWork.Employee.UpdateEmployeeSalaryAsync(destination, out int oldSalary);
                     var updateResponse = responseMap.Map<Employee, UpdateEmployeeSalaryResponse>(result);
-                    
-                    updateResponse.OldSalary = oldSalary;
-                    updateResponse.NewSalary = employee.FirstOrDefault()!.Salary;
-                    updateResponse.Successful = true;
-                    updateResponse.Message = "Salary updated successfully!";
 
-                    return updateResponse;
+                    try
+                    {
+                        await unitOfWork.CompleteAsync();
+
+                        updateResponse.OldSalary = oldSalary;
+                        updateResponse.NewSalary = employee.FirstOrDefault()!.Salary;
+                        updateResponse.Successful = true;
+                        updateResponse.Message = "Salary updated successfully!";
+
+                        return updateResponse;
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        throw ex;
+                    }
+
+                    
                 }
                 
                 return new UpdateEmployeeSalaryResponse { Successful = false, Message = "Employee does not exist" };
