@@ -8,6 +8,7 @@ using TB.Application.Abstractions.IRepositories;
 using TB.Domain.Models;
 using TB.Persistence.MySQL.MySQL;
 using TB.Shared.Dtos;
+using TB.Tests.NUnit.Abstraction.Tests;
 
 namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
 {
@@ -87,7 +88,6 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
-
         public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalaryAsync(Employee employee)
         {
             try
@@ -113,6 +113,8 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
                 throw;
             }
         }
+
+        
 
 
     }

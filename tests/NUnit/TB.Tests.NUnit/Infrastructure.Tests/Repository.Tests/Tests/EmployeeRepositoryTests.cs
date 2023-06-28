@@ -6,6 +6,7 @@ using MySqlConnector;
 using System.Data;
 using TB.Domain.Models;
 using TB.Persistence.MySQL.MySQL;
+using TB.Tests.NUnit.Abstraction.Tests;
 using TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -14,6 +15,8 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
     [TestFixture]
     public class EmployeeRepositoryTests
     {
+        private MockEmployeeRepository_NoDataBase repository;
+
         private IConfiguration configuration;
         private string connectionString;
 
@@ -21,6 +24,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
         [SetUp]
         public void Setup()
         {
+            repository = new MockEmployeeRepository_NoDataBase();
             configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
@@ -186,7 +190,6 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
 
         }
 
-
         [Test]
         public async Task TestUpdatesEmployeeSalaryAsync()
         {
@@ -258,6 +261,28 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.Tests
             
         }
 
+        [Test]
+        public async Task TestUpdatesEmployeeSalary_ValidInput_ReturnsEmployeeIdAndOldSalary()
+        {
+            // Arrange
+            int oldSalary = 5000;
+
+            var employee = new Employee
+            {
+                Id = 1,
+                Name = "Test",  
+                Salary = 7000
+            };
+
+            // Act
+            var result = await repository.TestUpdatesEmployeeSalary(employee);
+
+            // Assert
+            Assert.That(result.Salary, Is.Not.EqualTo(oldSalary));
+            Assert.That(result.Salary, Is.EqualTo(7000));
+
+
+        }
 
 
 

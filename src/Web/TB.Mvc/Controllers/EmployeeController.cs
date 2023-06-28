@@ -41,15 +41,9 @@ namespace TB.Mvc.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UpdateEmployeeSalaryResponse>> UpdateEmployeeSalary(int employeeId, int salary)
+        //[HttpPost]
+        public async Task<ActionResult<UpdateEmployeeSalaryResponse>> UpdateEmployeeSalary(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
         {
-            UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest = new()
-            {
-                Id = employeeId,
-                Salary = salary
-            };
-
             var response = await serviceManager.EmployeeService.MySQL_Dapper_UpdateEmployeeSalaryAsync(updateEmployeeSalaryRequest);
 
             if (!response.Successful == true)

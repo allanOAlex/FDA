@@ -53,7 +53,7 @@ namespace TB.Infrastructure.Implementations.Services
         {
             try
             {
-                var employee = await unitOfWork.Employee.FindByCondition(e => e.Id == updateEmployeeSalaryRequest.Id);
+                var employee = await unitOfWork.Employee.FindByCondition(e => e.Id == updateEmployeeSalaryRequest.EmployeeId);
                 if (employee != null)
                 {
                     var request = new MapperConfiguration(cfg => cfg.CreateMap<UpdateEmployeeSalaryRequest, Employee>());

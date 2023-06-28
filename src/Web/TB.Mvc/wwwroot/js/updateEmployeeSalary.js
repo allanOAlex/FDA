@@ -2,19 +2,15 @@
 
     var Id;
 
-    $('[data-target="#updateEmpSalaryModal"]').click(function () {
+    $(document).on('click', '.edit-employee', function () {
         Id = $(this).data('emp-id');
-    });
+        $('#empID').val(Id); 
 
+    });
 
     $('#updateEmpSalaryForm').submit(function (e) {
         e.preventDefault();
 
-        $('#empID').val(Id);
-
-        var employeeID = $('#empID').val();
-        var Salary = $('#newSalary').val();
-        
         $.ajax({
             url: 'employee/UpdateEmployeeSalary',
             type: 'POST',
@@ -35,6 +31,8 @@
         });
 
     })
+
+
 
 
 });
