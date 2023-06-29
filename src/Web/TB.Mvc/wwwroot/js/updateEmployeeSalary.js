@@ -1,20 +1,21 @@
 ﻿$(document).ready(function () {
 
     var Id;
+    var OldSalary;
 
-    $('[data-target="#updateEmpSalaryModal"]').click(function () {
+    $(document).on('click', '.edit-employee', function () {
         Id = $(this).data('emp-id');
-    });
+        $('#empID').val(Id); 
 
+        OldSalary = $(this).closest('tr').find('.salary-cell').text();
+        $('#currentSalary').text(OldSalary);
+        
+
+    });
 
     $('#updateEmpSalaryForm').submit(function (e) {
         e.preventDefault();
 
-        $('#empID').val(Id);
-
-        var employeeID = $('#empID').val();
-        var Salary = $('#newSalary').val();
-        
         $.ajax({
             url: 'employee/UpdateEmployeeSalary',
             type: 'POST',
@@ -34,7 +35,12 @@
             }
         });
 
+        
+
+
     })
+
+
 
 
 });
