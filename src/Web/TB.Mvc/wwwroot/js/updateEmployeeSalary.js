@@ -9,6 +9,7 @@
 
         OldSalary = $(this).closest('tr').find('.salary-cell').text();
         $('#currentSalary').text(OldSalary);
+        $('#currentSalary').val(OldSalary);
         
 
     });
