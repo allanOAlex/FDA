@@ -79,7 +79,11 @@ namespace TB.Mvc.Controllers
                 ViewBag.UserId = sessionDictionary["UserId"];
                 ViewBag.Name = sessionDictionary["Name"];
 
-                
+                ViewBag.DividendsCaption = "Dividends Data";
+                ViewBag.EarningsCaption = "Earnings Data";
+                ViewBag.StockPriceCaption = "Stock Price Data";
+
+
 
                 var authState = await ((CustomAuthStateProvider)authStateProvider).GetAuthenticationStateAsync();
                 ((CustomAuthStateProvider)authStateProvider).MarkUserAsAuthenticated(response);
