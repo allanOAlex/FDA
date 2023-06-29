@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TB.Application.Abstractions.Interfaces;
 using TB.Application.Abstractions.IServices;
 using TB.Domain.Models;
+using TB.Infrastructure.Implementations.Interfaces;
 using TB.Shared.Requests.Employee;
 using TB.Shared.Responses.Employee;
+using TB.Shared.Responses.User;
 
 namespace TB.Infrastructure.Implementations.Services
 {
@@ -49,11 +52,11 @@ namespace TB.Infrastructure.Implementations.Services
             }
         }
 
-        public async Task<UpdateEmployeeSalaryResponse> MySQL_Dapper_UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
+        public async Task<UpdateEmployeeSalaryResponse> UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
         {
             try
             {
-                var employee = await unitOfWork.Employee.FindByCondition(e => e.Id == updateEmployeeSalaryRequest.Id);
+                var employee = await unitOfWork.Employee.FindByCondition(e => e.Id == updateEmployeeSalaryRequest.EmployeeId);
                 if (employee != null)
                 {
                     var request = new MapperConfiguration(cfg => cfg.CreateMap<UpdateEmployeeSalaryRequest, Employee>());
@@ -63,15 +66,27 @@ namespace TB.Infrastructure.Implementations.Services
                     IMapper responseMap = response.CreateMapper();
 
                     var destination = requestMap.Map<UpdateEmployeeSalaryRequest, Employee>(updateEmployeeSalaryRequest);
-                    var result = await unitOfWork.Employee.UpdateEmployeeSalaryAsync(destination, out int oldSalary);
-                    var updateResponse = responseMap.Map<Employee, UpdateEmployeeSalaryResponse>(result);
-                    
-                    updateResponse.OldSalary = oldSalary;
-                    updateResponse.NewSalary = employee.FirstOrDefault()!.Salary;
-                    updateResponse.Successful = true;
-                    updateResponse.Message = "Salary updated successfully!";
 
-                    return updateResponse;
+                    (Employee returnEmployee, int oldSalary) = await unitOfWork.Employee.UpdatesEmployeeSalaryAsync(destination);
+                    var updatedEmployee = responseMap.Map<Employee, UpdateEmployeeSalaryResponse>(returnEmployee);
+
+                    try
+                    {
+                        await unitOfWork.CompleteAsync();
+
+                        updatedEmployee.OldSalary = oldSalary;
+                        updatedEmployee.NewSalary = employee.FirstOrDefault()!.Salary;
+                        updatedEmployee.Successful = true;
+                        updatedEmployee.Message = "Salary updated successfully!";
+
+                        return updatedEmployee;
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        throw ex;
+                    }
+
+                    
                 }
                 
                 return new UpdateEmployeeSalaryResponse { Successful = false, Message = "Employee does not exist" };
@@ -84,7 +99,51 @@ namespace TB.Infrastructure.Implementations.Services
             }
         }
 
+        public async Task<UpdateEmployeeSalaryResponse> MySQL_Dapper_UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
+        {
+            try
+            {
+                var employee = await unitOfWork.Employee.FindByCondition(e => e.Id == updateEmployeeSalaryRequest.EmployeeId);
+                if (employee != null)
+                {
+                    var request = new MapperConfiguration(cfg => cfg.CreateMap<UpdateEmployeeSalaryRequest, Employee>());
+                    var response = new MapperConfiguration(cfg => cfg.CreateMap<Employee, UpdateEmployeeSalaryResponse>());
 
+                    IMapper requestMap = request.CreateMapper();
+                    IMapper responseMap = response.CreateMapper();
+
+                    var destination = requestMap.Map<UpdateEmployeeSalaryRequest, Employee>(updateEmployeeSalaryRequest);
+                    var result = await unitOfWork.Employee.UpdateEmployeeSalaryAsync(destination);
+                    var updateResponse = responseMap.Map<Employee, UpdateEmployeeSalaryResponse>(result);
+
+                    try
+                    {
+                        await unitOfWork.CompleteAsync();
+
+                        updateResponse.OldSalary = employee.FirstOrDefault()!.Salary;
+                        updateResponse.NewSalary = destination.Salary;
+                        updateResponse.Successful = true;
+                        updateResponse.Message = "Salary updated successfully!";
+
+                        return updateResponse;
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        throw ex;
+                    }
+
+
+                }
+
+                return new UpdateEmployeeSalaryResponse { Successful = false, Message = "Employee does not exist" };
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
 
 

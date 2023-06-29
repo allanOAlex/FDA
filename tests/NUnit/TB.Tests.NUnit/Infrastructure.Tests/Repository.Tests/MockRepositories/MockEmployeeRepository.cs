@@ -8,6 +8,8 @@ using TB.Application.Abstractions.IRepositories;
 using TB.Domain.Models;
 using TB.Persistence.MySQL.MySQL;
 using TB.Shared.Dtos;
+using TB.Shared.Responses.Employee;
+using TB.Tests.NUnit.Abstraction.Tests;
 
 namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
 {
@@ -56,7 +58,38 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
-        public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalaryAsync(Employee employee)
+        public async Task<(Employee, int)> TestUpdatesEmployeeSalaryAsync_(Employee employee)
+        {
+            try
+            {
+                using (IDbConnection connection = new MySqlConnection(configuration.GetConnectionString("TBMS")))
+                {
+                    connection.Open();
+                    var parameters = new DynamicParameters(); 
+                    parameters.Add("@empID", employee.Id);
+                    parameters.Add("@newSalary", employee.Salary);
+                    parameters.Add("@oldSalary", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    var result = await connection.ExecuteAsync("UpdateEmployeeSalary", parameters, commandType: CommandType.StoredProcedure);
+
+                    object oldSalaryObj = parameters.Get<object>("@oldSalary");
+                    int oldSalary = (oldSalaryObj != DBNull.Value) ? Convert.ToInt32(oldSalaryObj) : 0;
+
+                    if (!string.IsNullOrEmpty(oldSalary.ToString()))
+                    {
+                        return (employee, oldSalary);
+                    }
+
+                    throw new Exception("Error updating employee salary");
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<UpdateEmployeeSalaryResponse> TestUpdatesEmployeeSalaryAsync(Employee employee)
         {
             try
             {
@@ -73,7 +106,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
                     object updatedOldSalary = parameters.Get<int>("@oldSalary");
                     int oldSalary = (updatedOldSalary != DBNull.Value) ? Convert.ToInt32(updatedOldSalary) : 0;
 
-                    return oldSalary != 0 ? new UpdateEmployeeDto { Succesful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary } : new UpdateEmployeeDto { Succesful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary };
+                    return oldSalary != 0 ? new UpdateEmployeeSalaryResponse { Successful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary } : new UpdateEmployeeSalaryResponse { Successful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary };
                 }
             }
             catch (Exception )
@@ -81,6 +114,8 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
                 throw;
             }
         }
+
+        
 
 
     }
