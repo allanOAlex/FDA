@@ -90,7 +90,7 @@ namespace TB.Infrastructure.Implementations.Repositories
             }
         }
 
-        public async Task<UpdateEmployeeSalaryResponse> UpdateEmployeeSalaryAsync(Employee employee)
+        public async Task<Employee> UpdateEmployeeSalaryAsync(Employee employee)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace TB.Infrastructure.Implementations.Repositories
                     object updatedOldSalary = parameters.Get<int>("@oldSalary");
                     int oldSalary = (updatedOldSalary != DBNull.Value) ? Convert.ToInt32(updatedOldSalary) : 0;
 
-                    return oldSalary != 0 ? new UpdateEmployeeSalaryResponse { Successful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary } : new UpdateEmployeeSalaryResponse { Successful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary };
+                    return oldSalary != 0 ? new Employee { Id = employee.Id, Salary = employee.Salary } : new Employee { Id = employee.Id, Salary = employee.Salary };
                 }
             }
             catch (Exception)
