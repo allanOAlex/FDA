@@ -8,6 +8,7 @@ using TB.Application.Abstractions.IRepositories;
 using TB.Domain.Models;
 using TB.Persistence.MySQL.MySQL;
 using TB.Shared.Dtos;
+using TB.Shared.Responses.Employee;
 using TB.Tests.NUnit.Abstraction.Tests;
 
 namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
@@ -88,7 +89,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
             }
         }
 
-        public async Task<UpdateEmployeeDto> TestUpdatesEmployeeSalaryAsync(Employee employee)
+        public async Task<UpdateEmployeeSalaryResponse> TestUpdatesEmployeeSalaryAsync(Employee employee)
         {
             try
             {
@@ -105,7 +106,7 @@ namespace TB.Tests.NUnit.Infrastructure.Tests.Repository.Tests.MockRepositories
                     object updatedOldSalary = parameters.Get<int>("@oldSalary");
                     int oldSalary = (updatedOldSalary != DBNull.Value) ? Convert.ToInt32(updatedOldSalary) : 0;
 
-                    return oldSalary != 0 ? new UpdateEmployeeDto { Succesful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary } : new UpdateEmployeeDto { Succesful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, Salary = employee.Salary };
+                    return oldSalary != 0 ? new UpdateEmployeeSalaryResponse { Successful = true, Message = "Salary updated successfully!", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary } : new UpdateEmployeeSalaryResponse { Successful = true, Message = "Failed updating employee salary", Id = employee.Id, OldSalary = oldSalary, NewSalary = employee.Salary };
                 }
             }
             catch (Exception )

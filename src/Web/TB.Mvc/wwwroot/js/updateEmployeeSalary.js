@@ -1,10 +1,15 @@
 ﻿$(document).ready(function () {
 
     var Id;
+    var OldSalary;
 
     $(document).on('click', '.edit-employee', function () {
         Id = $(this).data('emp-id');
         $('#empID').val(Id); 
+
+        OldSalary = $(this).closest('tr').find('.salary-cell').text();
+        $('#currentSalary').text(OldSalary);
+        
 
     });
 
