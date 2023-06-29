@@ -99,7 +99,7 @@ namespace TB.Infrastructure.Implementations.Services
             }
         }
 
-        public async Task<UpdateEmployeeSalaryResponse> MySQL_Dapper_UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
+        public async Task<UpdateEmployeeSalaryResponse> UpdateEmployeeSalaryAsync_(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest)
         {
             try
             {

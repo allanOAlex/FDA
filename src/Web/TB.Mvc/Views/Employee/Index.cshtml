@@ -86,7 +86,7 @@
 </div>
 
 <!-- Create Employee Modal -->
-<div class="modal fade" id="createEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">
+<div class="modal fade" id="createEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="createEmployeeModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -116,11 +116,11 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col">
-                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetCreateEmployeeForm()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetForm()">
                                 Reset
                             </button>
 
-                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseCreateEmployeeModal()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseModal()">
                                 Cancel
                             </button>
 
@@ -135,15 +135,12 @@
     </div>
 </div>
 
-<!-- Update Salary Modal -->
-<div class="modal fade" id="updateEmpSalaryModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalTitle" aria-hidden="true">uh
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="updateEmpSalaryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateEmpSalaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createUserModalTitle">Update Salary</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" onclick="resetAndCloseModal()">&times;</span>
-                </button>
+                <h5 class="modal-title" id="staticBackdropLabel">Update Salary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
             </div>
             <div class="modal-body">
                 <form id="updateEmpSalaryForm" asp-action="UpdateEmployeeSalary">
@@ -162,11 +159,11 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col">
-                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="resetUpdateEmployeeSalaryForm()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" style="background: #c0c0c0 !important; color:#444d6a !important; text-transform: none;" onclick="Reset()">
                                 Reset
                             </button>
 
-                            <button type="button" class="btn  btn-sm loat-end m-1" data-bs-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="resetAndCloseUpdateEmployeeSalaryModal()">
+                            <button type="button" class="btn  btn-sm loat-end m-1" data-bs-dismiss="modal" aria-label="Close" style="background: #d6ad53 !important; color:#fff !important; text-transform: none;" onclick="Close()">
                                 Cancel
                             </button>
 
@@ -186,19 +183,17 @@
 @section Scripts{
 
     <script>
-        resetCreateEmployeeForm()
+        function Reset(){
+            resetForm("updateEmpSalaryForm");
+        }
+        
     </script>
 
     <script>
-        resetAndCloseCreateEmployeeModal()
-    </script>
+        function Close(){
+            resetAndCloseModal("updateEmpSalaryModal", "updateEmpSalaryForm");
 
-    <script>
-        resetUpdateEmployeeSalaryForm();
-    </script>
-
-    <script>
-        resetAndCloseUpdateEmployeeSalaryModal();
+        }
     </script>
 
 
