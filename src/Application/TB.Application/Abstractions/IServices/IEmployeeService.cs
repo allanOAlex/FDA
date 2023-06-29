@@ -7,6 +7,8 @@ namespace TB.Application.Abstractions.IServices
     {
         Task<List<GetAllEmployeesResponse>> FindAll();
         Task<UpdateEmployeeSalaryResponse> UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest);
-        Task<UpdateEmployeeSalaryResponse> MySQL_Dapper_UpdateEmployeeSalaryAsync(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest); 
+        Task<UpdateEmployeeSalaryResponse> UpdateEmployeeSalaryAsync_(UpdateEmployeeSalaryRequest updateEmployeeSalaryRequest); 
+
+
     }
 }
