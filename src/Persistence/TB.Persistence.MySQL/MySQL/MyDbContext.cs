@@ -30,6 +30,7 @@ namespace TB.Persistence.MySQL.MySQL
         }
 
 
+        public DbSet<Log>? Loggings { get; set; }
         public DbSet<Employee>? Employees { get; set; }
         public DbSet<Dividend>? Dividends { get; set; }
         public DbSet<Earning>? Earnings { get; set; }

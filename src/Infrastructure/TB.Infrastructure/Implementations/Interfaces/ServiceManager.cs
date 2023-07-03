@@ -12,8 +12,10 @@ namespace TB.Infrastructure.Implementations.Interfaces
 {
     public class ServiceManager : IServiceManager
     {
-        public IAppUserService AppUserService { get; private set; }
+        
         public IAuthService AuthService { get; private set; }
+        public ILoggingService LoggingService { get; private set; }
+        public IAppUserService AppUserService { get; private set; }
         public IRoleService RoleService { get; private set; }
         public IFinancialDataService FinancialDataService { get; private set; }
         public IEmailService EmailService { get; private set; }
@@ -42,8 +44,9 @@ namespace TB.Infrastructure.Implementations.Interfaces
             httpContextAccessor = HttpContextAccessor;
 
 
-            AppUserService = new AppUserService(unitOfWork, mapper, userManager);
             AuthService = new AuthService(unitOfWork, mapper, signInManager, userManager, config, claimsService, jwtTokenService, httpContextAccessor);
+            LoggingService = new LoggingService(unitOfWork, mapper);
+            AppUserService = new AppUserService(unitOfWork, mapper, userManager);
             RoleService = new RoleService();
             FinancialDataService = new FinancialDataService(unitOfWork, mapper);
             EmailService = new EmailService(emailConfig);

@@ -194,6 +194,7 @@ namespace TB.Persistence.SQLServer
         }
 
 
+        public DbSet<Log>? Loggings { get; set; }
         public DbSet<AppUser>? AppUsers { get; set; }
         public DbSet<AppUserLogin>? AppUserLogins { get; set; }
         public DbSet<AppUserRole>? AppUserRoles { get; set; }

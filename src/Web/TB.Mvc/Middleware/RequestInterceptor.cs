@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NuGet.Protocol.Plugins;
 using Serilog;
+using Serilog.Events;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Reflection;
@@ -54,7 +56,8 @@ namespace TB.Mvc.Middleware
                         await CheckSessionValidity(context);
                     }
 
-                    Log.Information("Incoming Request: {Method} {Path}", context.Request.Method, context.Request.Path);
+                    Log.Information("Incoming Request: {Method} {Path} {Time}", context.Request.Method, context.Request.Path, DateTime.Now.ToString("T", new CultureInfo("en-GB")));
+                    Log.CloseAndFlush();
 
                     //await CheckTokenValididty(context);
                     await RemoveDuplicatesFromRequestPath(context);
@@ -69,7 +72,7 @@ namespace TB.Mvc.Middleware
                     catch (Exception ex)
                     {
                         Log.Error("Incoming Request: {Exception} {Method} {Path}", ex, context.Request.Method, context.Request.Path);
-
+                        await Log.CloseAndFlushAsync();
                         throw;
                     }
 
@@ -539,7 +542,7 @@ namespace TB.Mvc.Middleware
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(BadDataException))
+                if (exceptionType.Name == nameof(BadDataException))
                 {
                     response.StatusCode = 450;
                     message = $"{exceptionType.Name} {exception.Message}";
@@ -549,63 +552,69 @@ namespace TB.Mvc.Middleware
                     AppConstants.StatusCode = context.Session.GetInt32("statusCode");
 
                 }
-                else if (exceptionType.Name == nameof(BadRequestException))
+                if (exceptionType.Name == nameof(BadRequestException))
                 {
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(ForbiddenException))
+                if (exceptionType.Name == nameof(ForbiddenException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Forbidden;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(KeyNotFoundException))
+                if (exceptionType.Name == nameof(KeyNotFoundException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(NotFoundException))
+                if (exceptionType.Name == nameof(NotFoundException))
                 {
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(NotImplementedException))
+                if (exceptionType.Name == nameof(NotImplementedException))
                 {
                     response.StatusCode = (int)HttpStatusCode.NotImplemented;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(UnauthorizedAccessException))
+                if (exceptionType.Name == nameof(UnauthorizedAccessException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     message = exception.Message;
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(DbUpdateConcurrencyException))
+                if (exceptionType.Name == nameof(DbUpdateConcurrencyException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Conflict;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(NullReferenceException))
+                if (exceptionType.Name == nameof(NullReferenceException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Forbidden;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(InvalidOperationException))
+                if (exceptionType.Name == nameof(InvalidOperationException))
                 {
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }
-                else if (exceptionType.Name == nameof(InvalidCastException))
+                if (exceptionType.Name == nameof(InvalidCastException))
                 {
                     response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    message = $"{exceptionType.Name} {exception.Message}";
+                    stackTrace = exception.StackTrace;
+                }
+                if (exceptionType.Name == nameof(IOException))
+                {
+                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     message = $"{exceptionType.Name} {exception.Message}";
                     stackTrace = exception.StackTrace;
                 }

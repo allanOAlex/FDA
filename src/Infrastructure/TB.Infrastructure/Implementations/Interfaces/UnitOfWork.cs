@@ -12,6 +12,7 @@ namespace TB.Infrastructure.Implementations.Interfaces
     public class UnitOfWork : IUnitOfWork
     {
         public IAuthRepository Auth { get; private set; }
+        public ILoggingRepository Logging { get; private set; }
         public IAppUserRepository AppUsers { get; private set; }
         public IEmployeeRepository Employee { get; private set; }
         public IRoleRepository Roles { get; private set; }
@@ -39,6 +40,7 @@ namespace TB.Infrastructure.Implementations.Interfaces
             config = Config;
 
             Auth = new AuthRepository(signInManager, userManager, config);
+            Logging = new LoggingRepository(config, myContext);
             AppUsers = new AppUserRepository(context, daper, userManager);
             Employee = new EmployeeRepository(config, myContext);
             Roles = new RoleRepository();
