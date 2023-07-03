@@ -86,7 +86,7 @@ namespace TB.Infrastructure.Extensions
 
         private static string GetLogFilePath(IConfiguration configuration)
         {
-            string logFilePath = configuration["Logging:Serilog:FileSink"]!;
+            string logFilePath = configuration["Logging:Serilog:LogFile"]!;
             string logFileName = $"{DateTime.Now:dd-MM-yyyy HH:mm:ss}.txt";
             var filePath = Path.Combine(logFilePath, logFileName);
             return filePath;
@@ -132,8 +132,8 @@ namespace TB.Infrastructure.Extensions
 
                 return false;
             })
-            .WriteTo.Console(new CompactJsonFormatter())
-            .WriteTo.File(new JsonFormatter(), configuration["Logging:Serilog:FileSink"]!, rollingInterval: RollingInterval.Day)
+            .WriteTo.Async(s => s.Console(new CompactJsonFormatter()))
+            .WriteTo.Async(s => s.File(new JsonFormatter(), configuration["Logging:Serilog:LogFile"]!, rollingInterval: RollingInterval.Day))
             .CreateLogger();
 
             services.AddSingleton<ILoggerFactory>(provider =>

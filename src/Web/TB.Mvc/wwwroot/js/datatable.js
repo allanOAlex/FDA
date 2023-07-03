@@ -1,14 +1,12 @@
 ﻿$(document).ready(function () {
     $('.dataTable').DataTable({
-        "scrollY": 300,
-        "scrollX": false,
+        "scrollY": 400,
         "paging": true,
         "searching": true,
         "ordering": true,
         "info": true,
-        "pagingType": "full",
         "processing": true,
         "autoWidth": true,
-        fixedHeader: true
+        "fixedHeader": true
     });
 });
