@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Serilog;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using TB.Application.Abstractions.Interfaces;
@@ -48,6 +49,8 @@ namespace TB.Mvc.Controllers
         {
             try
             {
+                Log.Information($"Attempting login: {loginRequest.UserName}");
+
                 var response = await serviceManager.AuthService.LoginWithSignInManager(loginRequest);
                 if (response.Successful != true)
                 {
@@ -94,7 +97,35 @@ namespace TB.Mvc.Controllers
 
                 sessionDictionary["UserClaims"] = $"{authState.User.Claims}";
 
-                return View("Dashboard", financialData);
+                var dividends = new List<GetDividendResponse>
+                {
+                    new GetDividendResponse { Id = 1, Symbol = "AAPL", Dividends = 0.5m },
+                    new GetDividendResponse { Id = 2, Symbol = "GOOGL", Dividends = 1.2m },
+                    new GetDividendResponse { Id = 3, Symbol = "MSFT", Dividends = 0.8m }
+                };
+
+                var earnings = new List<GetEarningResponse>
+                {
+                    new GetEarningResponse { Id = 1, Symbol = "AAPL", Date = new DateTime(2022, 1, 1), Quater = "Q1", EpsEst = 1.2m, Eps = 1.5m, ReleaseTime = "8:00 AM" },
+                    new GetEarningResponse { Id = 2, Symbol = "GOOGL", Date = new DateTime(2022, 1, 1), Quater = "Q1", EpsEst = 2.0m, Eps =     2.5m, ReleaseTime = "9:00 AM" },
+                    new GetEarningResponse { Id = 3, Symbol = "MSFT", Date = new DateTime(2022, 1, 1), Quater = "Q1", EpsEst = 1.8m, Eps = 2.2m, ReleaseTime = "10:00 AM" }
+                };
+
+                var stockPrices = new List<GetStockPriceResponse>
+                {
+                    new GetStockPriceResponse { Id = 1, Symbol = "AAPL", Date = new DateTime(2022, 1, 1), Open = 150m, High = 160m, Low = 145m, Close = 155m, CloseAdjusted = 152m, Volume = 10000, SplitCoefficient = 1m },
+                    new GetStockPriceResponse { Id = 2, Symbol = "GOOGL", Date = new DateTime(2022, 1, 1), Open = 2500m, High = 2550m, Low =    2450m, Close = 2520m, CloseAdjusted = 2505m, Volume = 5000, SplitCoefficient = 1m },
+                    new GetStockPriceResponse { Id = 3, Symbol = "MSFT", Date = new DateTime(2022, 1, 1), Open = 300m, High = 310m, Low = 290m, Close = 305m, CloseAdjusted = 303m, Volume = 8000, SplitCoefficient = 1m }
+                };
+
+                FinancialDataDto dummyFinancialData = new()
+                {
+                    Dividends = dividends,
+                    Earnings = earnings,
+                    StockPrices = stockPrices,
+                };
+
+                return View("Dashboard", dummyFinancialData);
 
             }
             catch (Exception)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using TB.Domain.Models;
 using TB.Infrastructure.Configs;
@@ -15,6 +16,7 @@ using TB.Mvc.Session;
 using TB.Persistence.MySQL.MySQL;
 using TB.Persistence.SQLServer;
 using TB.Shared.Validations.Helpers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Auth").GetSection("Jwt").Get<JwtSettings>();
@@ -102,7 +104,7 @@ builder.Services.AddAuthentication((options) =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ClockSkew = TimeSpan.Zero,
-        ValidIssuer = jwtSettings.JwtIssuer,
+        ValidIssuer = jwtSettings!.JwtIssuer,
         ValidAudience = jwtSettings.JwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.JwtSecurityKey!)),
         ValidateIssuer = true,
@@ -163,6 +165,11 @@ builder.Services.AddSession(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddClientServices();
 builder.Services.AddInfrastructure();
+
+builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console());
+
+Log.Information("Building web host");
 
 
 var app = builder.Build();
