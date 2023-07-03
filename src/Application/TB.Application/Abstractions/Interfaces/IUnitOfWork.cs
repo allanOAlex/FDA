@@ -5,6 +5,7 @@ namespace TB.Application.Abstractions.Interfaces
     public interface IUnitOfWork
     {
         IAuthRepository Auth { get; }
+        ILoggingRepository Logging { get; }
         IAppUserRepository AppUsers { get; }
         IEmployeeRepository Employee { get; }
         IRoleRepository Roles { get; }

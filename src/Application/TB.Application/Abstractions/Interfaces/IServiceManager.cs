@@ -4,8 +4,10 @@ namespace TB.Application.Abstractions.Interfaces
 {
     public interface IServiceManager
     {
-        IAppUserService AppUserService { get; }
+        
         IAuthService AuthService { get; }
+        ILoggingService LoggingService { get; }
+        IAppUserService AppUserService { get; }
         IRoleService RoleService { get; }
         IEmailService EmailService { get; }
         IFinancialDataService FinancialDataService { get; }
