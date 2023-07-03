@@ -272,7 +272,7 @@ namespace TB.Infrastructure.Implementations.Services
                         throw new SecurityTokenValidationException($"Error|Token is Invalid");
                     }
 
-                    var response = httpContextAccessor.HttpContext.Response;
+                    var response = httpContextAccessor.HttpContext!.Response;
                     response.Cookies.Append("access_token", new JwtSecurityTokenHandler().WriteToken(refreshToken), new CookieOptions
                     {
                         HttpOnly = true,

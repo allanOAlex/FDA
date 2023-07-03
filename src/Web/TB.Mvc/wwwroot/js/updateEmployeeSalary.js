@@ -1,23 +1,31 @@
 ﻿$(function () {
     var Id;
-    var OldSalary;
+    var empName;
+    var oldSalary;
+    var updatedProperties = {};
 
     $(document).on('click', '.edit-employee', function () {
         Id = $(this).data('emp-id');
         $('#empID').val(Id);
 
-        OldSalary = $(this).closest('tr').find('.salary-cell').text();
-        $('#currentSalary').text(OldSalary);
-        $('#currentSalary').val(OldSalary);
+        oldSalary = $(this).closest('tr').find('.salary').text();
+        empName = $(this).closest('tr').find('.name').text();
+        $('#newSalary').text(oldSalary);
+        $('#newSalary').val(oldSalary);
+
+        
+
     });
 
     $('#updateEmpSalaryForm').on('submit', function (e) {
         e.preventDefault();
 
+        var formData = $(this).serializeArray();
+
         $.ajax({
             url: 'employee/UpdateEmployeeSalary',
             type: 'POST',
-            data: $(this).serialize(),
+            data: formData,
             success: function (response) {
                 if (response.successful) {
                     Swal.fire({
@@ -27,6 +35,27 @@
                     }).then(function () {
                         resetForm('updateEmpSalaryForm');
                         closeModal('updateEmpSalaryModal');
+
+                        updatedProperties = {
+                            'name': empName,
+                            'salary': response.newSalary
+                        };
+
+                        // Iterate over each cell in the current row and store the property values
+                        $(this).closest('tr').find('td').each(function () {
+                            var propertyName = $(this).attr('class');
+                            var propertyValue = $(this).text();
+                            updatedProperties[propertyName] = propertyValue;
+                        });
+                        
+                        // Update the corresponding table row with the updated properties
+                        var row = $('tr[data-emp-id="' + Id + '"]');
+                        for (var prop in updatedProperties) {
+                            if (updatedProperties.hasOwnProperty(prop)) {
+                                row.find('.' + prop).text(updatedProperties[prop]);
+                            }
+                        }
+
                     });
                 } else {
                     Swal.fire('Error!', 'Salary update failed. Please contact system admin.', 'error');

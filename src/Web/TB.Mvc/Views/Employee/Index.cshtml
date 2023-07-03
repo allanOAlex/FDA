@@ -31,9 +31,9 @@
                     {
                         @foreach (var emp in Model)
                         {
-                            <tr style="font-size:15px">
-                                <td>@emp.Name</td>
-                                <td class="salary-cell">@emp.Salary</td>
+                            <tr style="font-size:15px" data-emp-id="@emp.Id">
+                                <td class="name">@emp.Name</td>
+                                <td id="currentSalary" class="salary">@emp.Salary</td>
                                 
                                 <td>
                                     <button type="button" class="btn  btn-sm float-end m-1" style="background: #ba5567 !important; color:#fff !important; text-transform: none;" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" asp-controller="User" asp-action="Delete">
@@ -152,7 +152,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label asp-for="@updateEmpSalaryRequest.Salary" class="control-label"></label>
-                                <input asp-for="@updateEmpSalaryRequest.Salary" id="currentSalary" name="Salary" class="form-control" />
+                                <input asp-for="@updateEmpSalaryRequest.Salary" id="newSalary" name="Salary" class="form-control" />
                                 <span asp-validation-for="@updateEmpSalaryRequest.Salary" class="text-danger"></span>
                             </div>
                         </div>

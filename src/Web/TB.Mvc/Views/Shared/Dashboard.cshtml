@@ -8,7 +8,42 @@
 
     var dividends = Model.Dividends;
     var earnings = Model.Earnings;
+
     var stockPrices = Model.StockPrices;
+    var labels = stockPrices!.Select(stock => stock.Date.ToString("yyyy-MM-dd")).ToArray();
+    var datasets = new[]
+    {
+        new 
+        {
+            label = "Open",
+            backgroundColor = "rgba(255, 99, 132, 0.5)",
+            data = stockPrices!.Select(stock => stock.Open).ToArray()
+        },
+
+        new 
+        {
+            label = "High",
+            backgroundColor = "rgba(54, 162, 235, 0.5)",
+            data = stockPrices!.Select(stock => stock.High).ToArray()
+        },
+
+        new
+        {
+            label = "Low",
+            backgroundColor = "rgba(255, 205, 86, 0.5)",
+            data = stockPrices!.Select(stock => stock.Low).ToArray()
+        },
+
+    };
+
+    var chartData = new
+    {
+        labels = labels,
+        datasets = datasets
+    };
+
+    string chartDataJson = JsonSerializer.Serialize(chartData);
+
 }
 
 <div class="row " style="display:flex; flex-flow: row wrap;">
@@ -34,22 +69,30 @@
 </div>
 
 <div class="row">
-    <div class="col-xl-6">
+    <div class="col">
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-chart-area me-1"></i>
                 Volatility
             </div>
-            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+            <div class="card-body">
+                <canvas id="stockPriceChart" height="150">
+
+                </canvas>
+            </div>
         </div>
     </div>
-    <div class="col-xl-6">
+    <div class="col">
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-chart-bar me-1"></i>
                 Correlation
             </div>
-            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+            <div class="card-body">
+                <canvas id="myBarChart" height="150">
+
+                </canvas>
+            </div>
         </div>
     </div>
 </div>
@@ -63,18 +106,17 @@
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             @ViewBag.DividendsCaption
+            <button type="button" class="btn  btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                Fetch
+            </button>
         </div>
         <div class="card-body">
-            <table class="dataTable">
+            <table class="dataTable mt-1">
                 <thead>
                     <tr>
                         <th>Symbol</th>
                         <th>Dividends</th>
-                        <th>
-                            <button type="button" class="btn  btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
-                                Fetch
-                            </button>
-                        </th>
+                        
                     </tr>
                 </thead>
 
@@ -108,9 +150,12 @@
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             @ViewBag.EarningsCaption
+            <button type="button" class="btn  btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                Fetch
+            </button>
         </div>
         <div class="card-body">
-            <table class="dataTable">
+            <table class="dataTable mt-1">
                 <thead>
                     <tr>
                         <th>Symbol</th>
@@ -119,11 +164,7 @@
                         <th>Eps Est</th>
                         <th>Eps</th>
                         <th>Release Time</th>
-                        <th>
-                            <button type="button" class="btn  btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
-                                Fetch
-                            </button>
-                        </th>
+                        
                     </tr>
                 </thead>
 
@@ -161,9 +202,12 @@
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             @ViewBag.StockPriceCaption
+            <button type="button" class="btn  btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
+                Fetch
+            </button>
         </div>
         <div class="card-body">
-            <table class="dataTable">
+            <table class="dataTable mt-1">
                 <thead>
                     <tr>
                         <th>Symbol</th>
@@ -175,11 +219,7 @@
                         <th>Close Adjusted</th>
                         <th>Volume</th>
                         <th>Split Coefficient</th>
-                        <th>
-                            <button type="button" class="btn btn-sm float-end" style="background: #444d6a !important; color:#fff !important;">
-                                Add New
-                            </button>
-                        </th>
+                        
                     </tr>
                 </thead>
 
@@ -200,7 +240,6 @@
                                     <td>@stockPrice.CloseAdjusted</td>
                                     <td>@stockPrice.Volume</td>
                                     <td>@stockPrice.SplitCoefficient</td>
-
                                 </tr>
                             }
 
@@ -238,7 +277,34 @@ else
         saveTokenToLocalStorage(jwtToken);
     </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="~/sb/assets/demo/chart-area-demo.js"></script>
-    <script src="~/sb/assets/demo/chart-bar-demo.js"></script>
+    <script>
+        var chartData = JSON.parse('@chartDataJson');
+
+        var ctx = document.getElementById('stockPriceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    
 }
