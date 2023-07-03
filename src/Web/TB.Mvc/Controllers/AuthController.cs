@@ -49,8 +49,6 @@ namespace TB.Mvc.Controllers
         {
             try
             {
-                Log.Information($"Attempting login: {loginRequest.UserName}");
-
                 var response = await serviceManager.AuthService.LoginWithSignInManager(loginRequest);
                 if (response.Successful != true)
                 {
