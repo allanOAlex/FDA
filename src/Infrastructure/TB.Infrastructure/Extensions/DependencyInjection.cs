@@ -76,12 +76,6 @@ namespace TB.Infrastructure.Extensions
             .WriteTo.File(new RenderedCompactJsonFormatter(), "D:\\AppData\\Logs\\TBSDE\\log.txt", rollingInterval: RollingInterval.Day) // Add a file sink
             .CreateLogger();
 
-            //services.AddLogging(loggingBuilder =>
-            //{
-            //    loggingBuilder.ClearProviders();
-            //    loggingBuilder.AddSerilog();
-            //});
-
             services.AddSingleton<ILoggerFactory>(provider =>
             {
                 return new SerilogLoggerFactory(Log.Logger, true);
