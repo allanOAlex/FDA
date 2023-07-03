@@ -12,12 +12,16 @@ using Serilog.Formatting.Compact;
 using Serilog.Extensions.Logging;
 using Serilog.Core;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Serilog.Formatting.Json;
+using System.Net;
 
 namespace TB.Infrastructure.Extensions
 {
     public static class DependencyInjection
     {
         private static IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+
         public class CorrelationIdEnricher : ILogEventEnricher
         {
             private const string CorrelationIdPropertyName = "CorrelationId";
@@ -44,9 +48,51 @@ namespace TB.Infrastructure.Extensions
 
                 return correlationId;
             }
+
+            
         }
 
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public class IPAddressEnricher1 : ILogEventEnricher
+        {
+            public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+            {
+                var ipAddress = httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                if (ipAddress != null)
+                {
+                    var ipAddressProperty = propertyFactory.CreateProperty("IPAddress", ipAddress);
+                    logEvent.AddPropertyIfAbsent(ipAddressProperty);
+                }
+            }
+        }
+
+        class IPAddressEnricher : ILogEventEnricher
+        {
+            public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
+            {
+                var httpContext = httpContextAccessor.HttpContext;
+                var remoteIpAddress = httpContext?.Connection?.RemoteIpAddress;
+
+                // Check if the IP address is available and not in IPv6 loopback format
+                if (remoteIpAddress != null && !IPAddress.IsLoopback(remoteIpAddress))
+                {
+                    var ipAddress = remoteIpAddress.ToString();
+                    var ipAddressProperty = propertyFactory.CreateProperty("IPAddress", ipAddress);
+                    logEvent.AddPropertyIfAbsent(ipAddressProperty);
+                }
+            }
+        }
+
+
+
+        private static string GetLogFilePath(IConfiguration configuration)
+        {
+            string logFilePath = configuration["Logging:Serilog:FileSink"]!;
+            string logFileName = $"{DateTime.Now:dd-MM-yyyy HH:mm:ss}.txt";
+            var filePath = Path.Combine(logFilePath, logFileName);
+            return filePath;
+        }
+
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -68,19 +114,27 @@ namespace TB.Infrastructure.Extensions
             services.AddScoped<IEmployeeService, EmployeeService>();
 
             Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information() // Set the minimum logging level
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) // Override the minimum level for Microsoft logs
+            .MinimumLevel.Information() 
+            .MinimumLevel.Override("Serilog", LogEventLevel.Warning) 
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) 
             .Enrich.FromLogContext()
             .Enrich.With(new CorrelationIdEnricher())
-            .WriteTo.Console(new CompactJsonFormatter()) // Add the console sink
-            .WriteTo.File(new RenderedCompactJsonFormatter(), "D:\\AppData\\Logs\\TBSDE\\log.txt", rollingInterval: RollingInterval.Day) // Add a file sink
-            .CreateLogger();
+            .Enrich.WithProperty("MachineName", Environment.MachineName)
+            .Enrich.With<IPAddressEnricher>()
+            .Filter.ByExcluding(logEvent =>
+            {
+                if (logEvent.Properties.TryGetValue("SourceContext", out var value) &&
+                    value is ScalarValue scalarValue &&
+                    scalarValue.Value is string sourceContext)
+                {
+                    return sourceContext.StartsWith("Microsoft.");
+                }
 
-            //services.AddLogging(loggingBuilder =>
-            //{
-            //    loggingBuilder.ClearProviders();
-            //    loggingBuilder.AddSerilog();
-            //});
+                return false;
+            })
+            .WriteTo.Console(new CompactJsonFormatter())
+            .WriteTo.File(new JsonFormatter(), configuration["Logging:Serilog:FileSink"]!, rollingInterval: RollingInterval.Day)
+            .CreateLogger();
 
             services.AddSingleton<ILoggerFactory>(provider =>
             {
