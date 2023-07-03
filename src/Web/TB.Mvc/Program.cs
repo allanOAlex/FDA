@@ -164,15 +164,16 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddClientServices();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Host.UseSerilog((ctx, lc) => lc
-        .WriteTo.Console());
+//builder.Host.UseSerilog((ctx, lc) => lc
+//        .WriteTo.Console());
 
-Log.Information("Building web host");
 
 
 var app = builder.Build();
+
+
 
 app.UseSession();
 

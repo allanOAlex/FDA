@@ -54,6 +54,8 @@ namespace TB.Mvc.Middleware
                         await CheckSessionValidity(context);
                     }
 
+                    Log.Information("Incoming Request: {Method} {Path}", context.Request.Method, context.Request.Path);
+
                     //await CheckTokenValididty(context);
                     await RemoveDuplicatesFromRequestPath(context);
                     await ValidateRequest(context);
@@ -64,11 +66,13 @@ namespace TB.Mvc.Middleware
                     {
                         await next(context);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Log.Error("Incoming Request: {Exception} {Method} {Path}", ex, context.Request.Method, context.Request.Path);
 
                         throw;
                     }
+
                        
                 }
                 
@@ -90,6 +94,10 @@ namespace TB.Mvc.Middleware
             {
                 await HandleExceptionAsync(context, ex);
                 throw;
+            }
+            finally
+            {
+                //Log.CloseAndFlush();
             }
 
         }
