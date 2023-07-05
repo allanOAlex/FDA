@@ -30,7 +30,7 @@ namespace TB.Infrastructure.Implementations.Services
                 createUserRequest.CreatedOn = DateTime.Now;
                 createUserRequest.CreatedBy = 1;
 
-                IEnumerable<AppUser> user = await unitOfWork.AppUsers.FindAll();
+                IEnumerable<AppUser> user = await unitOfWork.AppUser.FindAll();
                 var existingUser = user.AsQueryable().Where(row =>
                 EF.Functions.Like(row.UserName!, createUserRequest.UserName!) &&
                 EF.Functions.Like(row.FirstName!, createUserRequest.FirstName!) &&
@@ -52,7 +52,7 @@ namespace TB.Infrastructure.Implementations.Services
                 IMapper responseMap = response.CreateMapper();
 
                 var destination = requestMap.Map<CreateUserRequest, AppUser>(createUserRequest);
-                var itemToCreate = await Task.FromResult(unitOfWork.AppUsers.Create(destination));
+                var itemToCreate = await Task.FromResult(unitOfWork.AppUser.Create(destination));
 
                 await unitOfWork.CompleteAsync();
                 bool Successful = true;
@@ -88,7 +88,7 @@ namespace TB.Infrastructure.Implementations.Services
                 var destination = requestMap.Map<CreateUserRequest, AppUser>(createUserRequest);
                 destination.PasswordHash = ph.HashPassword(destination, destination.Password);
                 destination.Password = destination.PasswordHash;
-                AppUser userToCreate = await unitOfWork.AppUsers.CreateWithUserManager(destination);
+                AppUser userToCreate = await unitOfWork.AppUser.CreateWithUserManager(destination);
                 var result = responseMap.Map<AppUser, CreateUserResponse>(userToCreate);
 
                 await unitOfWork.CompleteAsync();
@@ -119,7 +119,7 @@ namespace TB.Infrastructure.Implementations.Services
                 IMapper responseMap = response.CreateMapper();
 
                 var destination = requestMap.Map<DeleteUserRequest, AppUser>(deleteUserRequest);
-                var eventToCreate = await Task.FromResult(unitOfWork.AppUsers.Update(destination));
+                var eventToCreate = await Task.FromResult(unitOfWork.AppUser.Update(destination));
 
                 try
                 {
@@ -144,7 +144,7 @@ namespace TB.Infrastructure.Implementations.Services
             try
             {
                 List<GetAllUsersResponse> usersList = new();
-                var users = await unitOfWork.AppUsers.FindAll();
+                var users = await unitOfWork.AppUser.FindAll();
                 if (users.Any())
                 {
                     foreach (var item in users)
@@ -176,7 +176,7 @@ namespace TB.Infrastructure.Implementations.Services
         {
             try
             {
-                var userToFind = await unitOfWork.AppUsers.FindByCondition(e => e.Id == Id);
+                var userToFind = await unitOfWork.AppUser.FindByCondition(e => e.Id == Id);
                 if (userToFind.Any())
                 {
                     var response = from e in userToFind
@@ -204,7 +204,7 @@ namespace TB.Infrastructure.Implementations.Services
                 updateUserRequest.UpdatedOn = DateTime.Now;
                 updateUserRequest.UpdatedBy = updateUserRequest.UpdatedBy;
 
-                var entityResponse = await Task.FromResult(unitOfWork.AppUsers.FindByCondition(e => e.Id == updateUserRequest.Id).Result.AsQueryable());
+                var entityResponse = await Task.FromResult(unitOfWork.AppUser.FindByCondition(e => e.Id == updateUserRequest.Id).Result.AsQueryable());
 
                 var entity = entityResponse.AsNoTracking().FirstOrDefault();
 
@@ -215,7 +215,7 @@ namespace TB.Infrastructure.Implementations.Services
                 IMapper responseMap = response.CreateMapper();
 
                 var destination = requestMap.Map(updateUserRequest, entity);
-                var userToUpdate = await Task.FromResult(unitOfWork.AppUsers.Update(destination!));
+                var userToUpdate = await Task.FromResult(unitOfWork.AppUser.Update(destination!));
 
                 try
                 {
