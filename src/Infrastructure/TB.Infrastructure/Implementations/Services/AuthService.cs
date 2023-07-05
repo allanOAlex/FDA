@@ -120,7 +120,7 @@ namespace TB.Infrastructure.Implementations.Services
 
                 try
                 {
-                    var appUser = unitOfWork.AppUsers.Update(destination);
+                    var appUser = unitOfWork.AppUser.Update(destination);
                     await unitOfWork.CompleteAsync();
                     var Successful = true;
 

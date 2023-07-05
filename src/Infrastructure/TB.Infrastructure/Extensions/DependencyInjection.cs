@@ -98,14 +98,17 @@ namespace TB.Infrastructure.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             
+            services.AddScoped<ILoggingRepository, LoggingRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IFinancialDataRepository, FinancialDataRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddScoped<IServiceManager, ServiceManager>();
-            services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ILoggingService, LoggingService>();
+            services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -141,7 +144,7 @@ namespace TB.Infrastructure.Extensions
                 return new SerilogLoggerFactory(Log.Logger, true);
             });
 
-
+            services.AddMemoryCache();
 
 
             return services;

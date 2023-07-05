@@ -4,27 +4,31 @@ using Serilog.Sinks.File;
 using TB.Application.Abstractions.Interfaces;
 using TB.Mvc.Extensions;
 using TB.Mvc.Middleware;
+using TB.Mvc.Session;
 using TB.Shared.Exceptions.Global;
 using TB.Shared.Requests.Logging;
 using TB.Shared.Responses.Logging;
 
 namespace TB.Mvc.Controllers
 {
-    public class LogController : Controller
+    public class LogController : BaseController
     {
         private IConfiguration config;
         private readonly IServiceManager serviceManager;
+        private readonly SessionDictionary<string> sessionDictionary;
         private readonly string FolderPath;
         private readonly string Format;
-        private string[] Files;
+        private string[]? Files;
         private readonly string LogFile;
 
 
 
-        public LogController(IConfiguration Configuration, IServiceManager ServiceManager)
+        public LogController(IConfiguration Configuration, IServiceManager ServiceManager, SessionDictionary<string> SessionDictionary) : 
+            base(SessionDictionary)
         {
             config = Configuration;
             serviceManager = ServiceManager;
+            sessionDictionary = SessionDictionary;
             FolderPath = config["Logging:Serilog:FolderPath"]!;
             Format = config["Logging:Serilog:Format"]!;
             LogFile = config["Logging:Serilog:LogFile"]!;
