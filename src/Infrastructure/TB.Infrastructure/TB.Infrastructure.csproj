@@ -30,6 +30,7 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.FastConsole" Version="2.4.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using TB.Application.Abstractions.Interfaces;
 using TB.Application.Abstractions.IRepositories;
@@ -9,13 +10,14 @@ using TB.Persistence.SQLServer;
 
 namespace TB.Infrastructure.Implementations.Interfaces
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         public IAuthRepository Auth { get; private set; }
         public ILoggingRepository Logging { get; private set; }
-        public IAppUserRepository AppUsers { get; private set; }
+        public ICacheRepository Cache { get; private set; }
+        public IAppUserRepository AppUser { get; private set; }
         public IEmployeeRepository Employee { get; private set; }
-        public IRoleRepository Roles { get; private set; }
+        public IRoleRepository Role { get; private set; }
         public IFinancialDataRepository FinancialData { get; private set; }
         public IDividendRepository Dividend { get; private set; }
         public IEarningRepository Earning { get; private set; }
@@ -28,9 +30,10 @@ namespace TB.Infrastructure.Implementations.Interfaces
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly IConfiguration config;
+        private readonly IMemoryCache cache;
 
 
-        public UnitOfWork(DBContext Context, MyDBContext MyContext, Dappr Daper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IConfiguration Config)
+        public UnitOfWork(DBContext Context, MyDBContext MyContext, Dappr Daper, UserManager<AppUser> UserManager, SignInManager<AppUser> SignInManager, IConfiguration Config, IMemoryCache IMemoryCache)
         {
             context = Context;
             myContext = MyContext;
@@ -38,12 +41,14 @@ namespace TB.Infrastructure.Implementations.Interfaces
             userManager = UserManager;
             signInManager = SignInManager;
             config = Config;
+            cache = IMemoryCache;
 
             Auth = new AuthRepository(signInManager, userManager, config);
             Logging = new LoggingRepository(config, myContext);
-            AppUsers = new AppUserRepository(context, daper, userManager);
+            Cache = new CacheRepository(cache);
+            AppUser = new AppUserRepository(context, daper, userManager);
             Employee = new EmployeeRepository(config, myContext);
-            Roles = new RoleRepository();
+            Role = new RoleRepository();
             FinancialData = new FinancialDataRepository(context);
             Dividend = new DividendRepository(myContext);
             Earning = new EarningRepository(myContext);

@@ -19,6 +19,7 @@ using System.IO;
 using System.Text.Json;
 using TB.Shared.Dtos;
 using Microsoft.Extensions.Logging.Abstractions;
+using TB.Shared.Responses.Caching;
 
 namespace TB.Infrastructure.Implementations.Services
 {
@@ -101,6 +102,18 @@ namespace TB.Infrastructure.Implementations.Services
                 List<QueryLogFileResponse> queryLogFileResponses = new();
                 try
                 {
+                    var cachedData = await unitOfWork.Cache.GetAsync("Logs");
+                    if (cachedData.Count() > 0)
+                    {
+                        foreach (var data in cachedData)
+                        {
+                            queryLogFileResponses.Add((QueryLogFileResponse)data);
+                            
+                        }
+
+                        return queryLogFileResponses;
+                    }
+
                     using (var streamReader = File.OpenText(logFileQueryRequest.LogFile!))
                     {
                         string line;
@@ -109,7 +122,6 @@ namespace TB.Infrastructure.Implementations.Services
                         {
                             var logEvent = JsonSerializer.Deserialize<LogEntryDto>(line);
 
-                            // Access the log properties
                             QueryLogFileResponse queryLogFileResponse = new()
                             {
                                 TimeStamp = logEvent!.Timestamp.ToString(),
@@ -124,9 +136,14 @@ namespace TB.Infrastructure.Implementations.Services
                                 MachineName = logEvent.Properties.MachineName,
                             };
 
-                            // Perform desired operations with the log data
                             queryLogFileResponses.Add(queryLogFileResponse);
 
+                        }
+
+                        var isWrittenToCache = await unitOfWork.Cache.SetAsync("Logs", queryLogFileResponses);
+                        if (!isWrittenToCache) 
+                        {
+                            queryLogFileResponses.Add(new QueryLogFileResponse { Message = $"CacheError|Data was not writen to cache {nameof(QueryLogFileResponse)}" });
                         }
                     }
 
